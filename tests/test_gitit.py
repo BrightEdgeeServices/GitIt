@@ -3,8 +3,8 @@ import os
 from pathlib import Path
 import pytest
 from git import Repo
-from gitit import gitit
 from add import adda
+import main
 
 
 class TestGitIt:
@@ -15,7 +15,7 @@ class TestGitIt:
         #     ["pytest", "set_env", "--py-version", "310", "--issue-prefix", "PRE", "--project-name", "Project Name"]
         # )
 
-        gitit.main()
+        main.main()
         assert os.environ['GITIT_PY_VER'] is None
         assert os.environ['GITIT_ISSUE_PREFIX'] is None
         assert os.environ['GITIT_PROJECT_NAME'] is None
@@ -36,7 +36,7 @@ class TestGitIt:
             ],
         )
 
-        gitit.main()
+        main.main()
         assert os.environ['GITIT_PY_VER'] == '310'
         assert os.environ['GITIT_ISSUE_PREFIX'] == 'PRE'
         assert os.environ['GITIT_PROJECT_NAME'] == 'Project Name'
@@ -44,7 +44,7 @@ class TestGitIt:
 
     def test_set_env_with_no_args(self, monkeypatch):
         monkeypatch.setattr('sys.argv', ["pytest", "set_env"])
-        gitit.main()
+        main.main()
         assert os.getenv('GITIT_PY_VER') == '310'
         assert os.getenv('GITIT_ISSUE_PREFIX') == 'PRE'
         assert os.getenv('GITIT_PROJECT_NAME') == 'Project Name'
