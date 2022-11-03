@@ -6,8 +6,12 @@
 # D:\Dropbox\Projects\GitIt\.packageit\packageit.ini
 #===================================================================
 beetools
-configparserext
-releaselogit
-semverit
-termcolor
-toml
+#configparserext
+#docopt
+gitignore_parser
+gitpython
+pydantic
+#releaselogit
+#semverit
+#termcolor
+#toml

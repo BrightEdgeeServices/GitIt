@@ -1,6 +1,6 @@
 [0.0.1]
 Title = "Version 0.0.1"
-Description = [ "Create in Bright Edge eSerivces",]
+Description = [ 'Implimentt "set_env" & "adda"',]
 GitHubIssues = []
 
 [0.0.0]
