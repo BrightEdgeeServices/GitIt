@@ -1,3 +1,8 @@
+[0.0.3]
+Title = "Version 0.0.3"
+Description = [ 'Change minimum requirement for Python to 3.10.',]
+GitHubIssues = []
+
 [0.0.2]
 Title = "Version 0.0.2"
 Description = [ 'Fixed "set_env" import module references.',]
