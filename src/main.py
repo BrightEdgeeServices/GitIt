@@ -34,7 +34,7 @@ class ParseArgs:
             # aliases=['aa']
         )
         self.parser_adda.add_argument('--all', help='Add all files')
-        self.parser_adda.set_defaults(func=adda.ProjectRepo)
+        self.parser_adda.set_defaults(func=adda.AddA)
         pass
 
 

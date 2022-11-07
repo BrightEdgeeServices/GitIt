@@ -26,15 +26,23 @@ class EnvSetUp:
         gitignore_path = self.dir / '.gitignore'
         untracked_dir = self.dir / 'untracked'
         tracked_dir = self.dir / 'tracked'
+        github_dir = self.dir / '.github'
         gitignore_path.touch()
-        gitignore_path.write_text('.git/\nuntracked/\n')
+        # gitignore_path.write_text('.git/\nuntracked/\n')
+        gitignore_path.write_text('untracked/\n')
         untracked_dir.mkdir()
         tracked_dir.mkdir()
+        Path(github_dir, 'ISSUE_TEMPLATE').mkdir(parents=True, exist_ok=True)
+        Path(github_dir, 'workflows').mkdir(parents=True, exist_ok=True)
+        (self.dir / 'tracked.txt').touch()
         (untracked_dir / 'untracked01.py').touch()
         (untracked_dir / 'untracked02.py').touch()
         (tracked_dir / 'tracked01.py').touch()
         (tracked_dir / 'tracked02.py').touch()
-        (self.dir / 'tracked.txt').touch()
+        (github_dir / 'ISSUE_TEMPLATE' / 'bug.md').touch()
+        (github_dir / 'ISSUE_TEMPLATE' / 'config.yaml').touch()
+        (github_dir / 'workflows' / 'ci.yaml').touch()
+        (github_dir / 'workflows' / 'release.yml').touch()
         pass
 
 

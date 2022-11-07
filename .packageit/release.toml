@@ -1,3 +1,8 @@
+[0.0.4]
+Title = "Version 0.0.4"
+Description = [ 'Automate the entry point.', '']
+GitHubIssues = []
+
 [0.0.3]
 Title = "Version 0.0.3"
 Description = [ 'Change minimum requirement for Python to 3.10.',]
@@ -8,12 +13,17 @@ Title = "Version 0.0.2"
 Description = [ 'Fixed "set_env" import module references.',]
 GitHubIssues = []
 
+[0.0.2]
+Title = "Version 0.0.2"
+Description = [ 'Implement "set_env" & "adda"',]
+GitHubIssues = []
+
 [0.0.1]
 Title = "Version 0.0.1"
-Description = [ 'Implimentt "set_env" & "adda"',]
+Description = [ 'Implement "set_env" & "adda"',]
 GitHubIssues = []
 
 [0.0.0]
 Title = "Version 0.0.0"
-Description = [ "Creation of the project", "List all the changes to the project here.", "Changes listed here will be in the release notes under the above heading.",]
-GitHubIssues = []
+Description = [ "Creation of the project",]
+GitHubIssues = [1]
