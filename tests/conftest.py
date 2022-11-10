@@ -9,7 +9,7 @@ from tempfile import mkdtemp
 from beetools import rm_tree
 
 
-sys.path.append('path')
+# sys.path.append('path')
 
 
 class WorkingDir:
