@@ -1,5 +1,10 @@
+[0.0.6]
+Title = "Version 0.0.6"
+Description = [ 'Automate the entry point #2.', '']
+GitHubIssues = []
+
 [0.0.5]
-Title = "Version 0.0.4"
+Title = "Version 0.0.5"
 Description = [ 'Automate the entry point #2.', '']
 GitHubIssues = []
 

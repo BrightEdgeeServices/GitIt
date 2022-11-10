@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from git import Repo
 from gitit.add.adda import AddA
-from gitit import main
+from gitit import __main__
 
 
 class TestGitIt:
@@ -31,7 +31,7 @@ class TestGitIt:
             ],
         )
 
-        main.main()
+        __main__.main()
         assert os.environ['GITIT_PY_VER'] == '310'
         assert os.environ['GITIT_ISSUE_PREFIX'] == 'PRE'
         assert os.environ['GITIT_PROJECT_NAME'] == 'Project Name'
@@ -39,7 +39,7 @@ class TestGitIt:
 
     def test_set_env_with_no_args(self, monkeypatch):
         monkeypatch.setattr('sys.argv', ["pytest", "setenv"])
-        main.main()
+        __main__.main()
         assert os.getenv('GITIT_PY_VER') == '310'
         assert os.getenv('GITIT_ISSUE_PREFIX') == 'PRE'
         assert os.getenv('GITIT_PROJECT_NAME') == 'Project Name'
