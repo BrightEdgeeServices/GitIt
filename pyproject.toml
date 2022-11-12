@@ -9,3 +9,7 @@ extend-exclude = "/templates"
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
 pythonpath = "src"
+markers = [
+    "main: Run tests with __main__",
+	"adda: Run adda tests"
+]

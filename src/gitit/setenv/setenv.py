@@ -10,7 +10,6 @@ class EnvSettings(BaseModel):
 
 class Environment:
     def __init__(self, p_settings):
-        # import pdb;pdb.set_trace()
         self.settings = EnvSettings(
             py_ver=p_settings.py_version,
             issue_prefix=p_settings.issue_prefix,

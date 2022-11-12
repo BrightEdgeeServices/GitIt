@@ -30,10 +30,13 @@ class ParseArgs:
     def adda(self):
         self.parser_adda = self.subparsers.add_parser(
             'adda',
-            help='This adds, modifies, and removes index entries to match the working tree.',
-            # aliases=['aa']
+            help='Mimic the "git add -A" command.  Only explicitly allow adding to "main" or "master".',
         )
-        self.parser_adda.add_argument('--all', help='Add all files')
+        self.parser_adda.add_argument(
+            '--master',
+            action='store_true',
+            default = False,
+            help='Enable add to "master or "main" branches')
         self.parser_adda.set_defaults(func= adda.AddA)
         pass
 
@@ -42,16 +45,13 @@ def main():
     pa = ParseArgs()
     pa.setenv()
     pa.adda()
-    args = pa.parser.parse_args()
-    # print(f"Args: {args}")
-    # try:
+    try:
+        args = pa.parser.parse_args()
+    except SystemExit as err:
+        pa.parser.print_help()
+        return err
     args.func(args)
-    # except:
-    #     # pa.parser.print_help()
-    #     sys.exit(2)
-    pass
 
 
 if __name__ == "__main__":
-    # import pdb;pdb.set_trace()
     main()
