@@ -10,8 +10,8 @@ from gitit import __main__
 @pytest.mark.main
 class TestGitIt:
     def test_gitit_with_no_args(self):
-        r = __main__.main()
-        assert r.code == 2
+        with pytest.raises(SystemExit):
+            __main__.main()
         pass
 
     # def test_set_env_with_args(self, monkeypatch):
@@ -34,14 +34,6 @@ class TestGitIt:
     #     assert os.environ['GITIT_ISSUE_PREFIX'] == 'PRE'
     #     assert os.environ['GITIT_PROJECT_NAME'] == 'Project Name'
     #     pass
-
-    def test_set_env_with_no_args(self, monkeypatch):
-        monkeypatch.setattr('sys.argv', ["pytest", "setenv"])
-        __main__.main()
-        assert os.getenv('GITIT_PY_VER') == '310'
-        assert os.getenv('GITIT_ISSUE_PREFIX') == 'PRE'
-        assert os.getenv('GITIT_PROJECT_NAME') == 'Project Name'
-        pass
 
 
 @pytest.mark.adda

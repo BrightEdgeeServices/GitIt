@@ -1,4 +1,5 @@
 import argparse
+import sys
 from gitit.setenv import setenv
 from gitit.add import adda
 
@@ -46,10 +47,10 @@ def main():
     pa.adda()
     try:
         args = pa.parser.parse_args()
+        args.func(args)
     except SystemExit as err:
         pa.parser.print_help()
-        return err
-    args.func(args)
+        sys.exit(err)
 
 
 if __name__ == "__main__":
