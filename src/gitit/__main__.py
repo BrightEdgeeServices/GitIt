@@ -45,12 +45,14 @@ def main():
     pa = ParseArgs()
     pa.setenv()
     pa.adda()
-    try:
+    if len(sys.argv) > 1:
+        # import pdb;pdb.set_trace()
         args = pa.parser.parse_args()
         args.func(args)
-    except SystemExit as err:
+    else:
         pa.parser.print_help()
-        sys.exit(err)
+        sys.exit(2)
+    pass
 
 
 if __name__ == "__main__":
