@@ -6,6 +6,7 @@ from git import Repo
 from gitit.add.adda import AddToMasterBranchError
 from gitit import __main__
 
+
 @pytest.mark.main
 class TestGitIt:
     def test_gitit_with_no_args(self):
@@ -42,6 +43,7 @@ class TestGitIt:
         assert os.getenv('GITIT_PROJECT_NAME') == 'Project Name'
         pass
 
+
 @pytest.mark.adda
 class TestAddA:
     def test_adda_clean(self, monkeypatch, env_setup_self_destruct):
@@ -67,7 +69,8 @@ class TestAddA:
             '.gitignore',
             'tracked.txt',
             'tracked/tracked01.py',
-            'tracked/tracked02.py']
+            'tracked/tracked02.py',
+        ]
         repo.close()
         os.chdir(env_setup.dir.parent)
         pass
@@ -88,7 +91,9 @@ class TestAddA:
 
         repo = Repo(env_setup.dir)
         repo.index.commit("Commit original files")
-        Path(env_setup.dir, 'tracked', 'tracked01.py').write_text('This files can be deleted')
+        Path(env_setup.dir, 'tracked', 'tracked01.py').write_text(
+            'This files can be deleted'
+        )
         diff = [x.a_path for x in repo.index.diff(None)]
         assert diff == ['tracked/tracked01.py']
         repo.close()

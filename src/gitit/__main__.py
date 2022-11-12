@@ -19,12 +19,10 @@ class ParseArgs:
             help='Set the environment variables for the project.',
             # aliases=['se']
         )
-        self.parser_setenv.add_argument(
-            '--py-version', help='Installed python version'
-        )
+        self.parser_setenv.add_argument('--py-version', help='Installed python version')
         self.parser_setenv.add_argument('--issue-prefix', help='Prefix for git issues')
         self.parser_setenv.add_argument('--project-name', help='Project name')
-        self.parser_setenv.set_defaults(func= setenv.Environment)
+        self.parser_setenv.set_defaults(func=setenv.Environment)
         pass
 
     def adda(self):
@@ -35,9 +33,10 @@ class ParseArgs:
         self.parser_adda.add_argument(
             '--master',
             action='store_true',
-            default = False,
-            help='Enable add to "master or "main" branches')
-        self.parser_adda.set_defaults(func= adda.AddA)
+            default=False,
+            help='Enable add to "master or "main" branches',
+        )
+        self.parser_adda.set_defaults(func=adda.AddA)
         pass
 
 
