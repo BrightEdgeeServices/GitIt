@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 import pytest
 from git import Repo
-from gitit.add.adda import AddToMasterBranchError
+from gitit.add.add import AddToMasterBranchError
 from gitit import __main__
 
 
@@ -41,9 +41,9 @@ class TestGitIt:
     #     pass
 
 
-@pytest.mark.adda
-class TestAddA:
-    def test_adda_clean(self, monkeypatch, env_setup_self_destruct):
+@pytest.mark.add
+class TestAdd:
+    def test_add_a_clean(self, monkeypatch, env_setup_self_destruct):
         env_setup = env_setup_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'adda', '--master'])
@@ -53,7 +53,7 @@ class TestAddA:
 
         os.chdir(env_setup.dir)
         pa = __main__.ParseArgs()
-        pa.adda()
+        pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
         repo = Repo.init(env_setup.dir, bare=False)
@@ -72,7 +72,7 @@ class TestAddA:
         os.chdir(env_setup.dir.parent)
         pass
 
-    def test_adda_change_file(self, monkeypatch, env_setup_self_destruct):
+    def test_add_a_change_file(self, monkeypatch, env_setup_self_destruct):
         env_setup = env_setup_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'adda', '--master'])
@@ -82,7 +82,7 @@ class TestAddA:
 
         os.chdir(env_setup.dir)
         pa = __main__.ParseArgs()
-        pa.adda()
+        pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
 
@@ -112,7 +112,7 @@ class TestAddA:
         os.chdir(env_setup.dir.parent)
         pass
 
-    def test_adda_add_new_file(self, monkeypatch, env_setup_self_destruct):
+    def test_add_a_add_new_file(self, monkeypatch, env_setup_self_destruct):
         env_setup = env_setup_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'adda', '--master'])
@@ -122,7 +122,7 @@ class TestAddA:
 
         os.chdir(env_setup.dir)
         pa = __main__.ParseArgs()
-        pa.adda()
+        pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
 
@@ -150,7 +150,7 @@ class TestAddA:
         os.chdir(env_setup.dir.parent)
         pass
 
-    def test_adda_delete_file(self, monkeypatch, env_setup_self_destruct):
+    def test_add_a_delete_file(self, monkeypatch, env_setup_self_destruct):
         env_setup = env_setup_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'adda', '--master'])
@@ -160,7 +160,7 @@ class TestAddA:
 
         os.chdir(env_setup.dir)
         pa = __main__.ParseArgs()
-        pa.adda()
+        pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
 
@@ -188,7 +188,7 @@ class TestAddA:
         os.chdir(env_setup.dir.parent)
         pass
 
-    def test_adda_no_master(self, monkeypatch, env_setup_self_destruct):
+    def test_add_a_no_master(self, monkeypatch, env_setup_self_destruct):
         env_setup = env_setup_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'adda'])
@@ -198,8 +198,74 @@ class TestAddA:
 
         os.chdir(env_setup.dir)
         pa = __main__.ParseArgs()
-        pa.adda()
+        pa.add_a()
         args = pa.parser.parse_args()
         with pytest.raises(AddToMasterBranchError):
             args.func(args)
         pass
+
+
+@pytest.mark.commit
+class TestCommit:
+    def test_commit_def(self, monkeypatch, env_setup_self_destruct):
+        env_setup = env_setup_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr('sys.argv', ['pytest', 'commitdef'])
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.close()
+        pa = __main__.ParseArgs()
+        pa.commit_def()
+        args = pa.parser.parse_args()
+        obj = args.func(args)
+
+        assert not repo.is_dirty()
+        assert obj.commit_obj.message == 'Routine commit'
+        pass
+
+    def test_commit_cust(self, monkeypatch, env_setup_self_destruct):
+        env_setup = env_setup_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr(
+            'sys.argv', ['pytest', 'commitcust', '--msg', 'Custom message']
+        )
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.close()
+        pa = __main__.ParseArgs()
+        pa.commit_cust()
+        args = pa.parser.parse_args()
+        obj = args.func(args)
+
+        assert not repo.is_dirty()
+        assert obj.commit_obj.message == 'Custom message'
+        pass
+
+    def test_commit_pre(self, monkeypatch, env_setup_self_destruct):
+        env_setup = env_setup_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr('sys.argv', ['pytest', 'commitpre', '--msg', 'DC'])
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.close()
+        pa = __main__.ParseArgs()
+        pa.commit_pre()
+        args = pa.parser.parse_args()
+        obj = args.func(args)
+
+        assert not repo.is_dirty()
+        assert obj.commit_obj.message == 'Daily commit'
+        pass
+
+    # git checkout master
+    # git pull
+    # git checkout -b %_gh_issue%
+    # git push -u origin %_gh_issue%
+    # ) else (
+    # @echo "Supply the git 'issue' number as NNNNN"

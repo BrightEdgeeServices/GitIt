@@ -5,24 +5,6 @@
 # packageit\pimp.ini and
 # D:\Dropbox\Projects\GitIt\.packageit\packageit.ini
 #===================================================================
-#pip
-#wheel
-beetools
-#black
-#configparserext
-#gitignore_parser
-gitpython
+black
 pre-commit
-#pygithub
 pytest
-#pytest-cov
-#releaselogit
-#requests
-#semverit
-#sphinx
-#sphinx-autobuild
-#sphinx-rtd-theme
-#termcolor
-#toml
-#twine
-#build
