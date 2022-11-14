@@ -10,35 +10,14 @@ from gitit import __main__
 @pytest.mark.main
 class TestGitIt:
     def test_gitit_with_no_args(self, monkeypatch):
-        # monkeypatch.setattr(
-        #     'sys.argv',
-        #     ['gitit'],
-        # )
+        monkeypatch.setattr(
+            'sys.argv',
+            ['gitit'],
+        )
         with pytest.raises(SystemExit):
             __main__.main()
 
         pass
-
-    # def test_set_env_with_args(self, monkeypatch):
-    #     monkeypatch.setattr(
-    #         'sys.argv',
-    #         [
-    #             "pytest",
-    #             "setenv",
-    #             "--py-version",
-    #             "310",
-    #             "--issue-prefix",
-    #             "PRE",
-    #             "--project-name",
-    #             "Project Name",
-    #         ],
-    #     )
-    #
-    #     __main__.main()
-    #     assert os.environ['GITIT_PY_VER'] == '310'
-    #     assert os.environ['GITIT_ISSUE_PREFIX'] == 'PRE'
-    #     assert os.environ['GITIT_PROJECT_NAME'] == 'Project Name'
-    #     pass
 
 
 @pytest.mark.add
@@ -205,6 +184,40 @@ class TestAdd:
         pass
 
 
+@pytest.mark.branch
+class TestBranch:
+    def test_branch_new(self, monkeypatch, env_setup_self_destruct):
+        env_setup = env_setup_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr(
+            'sys.argv',
+            [
+                'pytest',
+                'branchnew',
+                '--master-branch',
+                '--issue',
+                '1',
+                '--category',
+                'feature',
+                '--desc',
+                'My_first_branch',
+            ],
+        )
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.index.commit("Commit original files")
+        repo.close()
+        pa = __main__.ParseArgs()
+        pa.branch_new()
+        args = pa.parser.parse_args()
+        obj = args.func(args)
+
+        assert obj.branch_name == repo.head.ref.name
+        pass
+
+
 @pytest.mark.commit
 class TestCommit:
     def test_commit_def(self, monkeypatch, env_setup_self_destruct):
@@ -222,7 +235,7 @@ class TestCommit:
         obj = args.func(args)
 
         assert not repo.is_dirty()
-        assert obj.commit_obj.message == 'Routine commit'
+        assert obj.repo.head.ref.commit.message == 'Routine commit\n'
         pass
 
     def test_commit_cust(self, monkeypatch, env_setup_self_destruct):
@@ -242,7 +255,7 @@ class TestCommit:
         obj = args.func(args)
 
         assert not repo.is_dirty()
-        assert obj.commit_obj.message == 'Custom message'
+        assert obj.repo.head.ref.commit.message == 'Custom message\n'
         pass
 
     def test_commit_pre(self, monkeypatch, env_setup_self_destruct):
@@ -260,12 +273,26 @@ class TestCommit:
         obj = args.func(args)
 
         assert not repo.is_dirty()
-        assert obj.commit_obj.message == 'Daily commit'
+        assert obj.repo.head.ref.commit.message == 'Daily commit\n'
         pass
 
-    # git checkout master
-    # git pull
-    # git checkout -b %_gh_issue%
-    # git push -u origin %_gh_issue%
-    # ) else (
-    # @echo "Supply the git 'issue' number as NNNNN"
+
+@pytest.mark.push
+class TestPush:
+    def test_push(self, monkeypatch, env_setup_self_destruct):
+        env_setup = env_setup_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr('sys.argv', ['pytest', 'push'])
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.index.commit("Commit original files")
+        repo.close()
+        pa = __main__.ParseArgs()
+        pa.branch_new()
+        args = pa.parser.parse_args()
+        obj = args.func(args)
+
+        assert obj.branch_name == repo.head.ref.name
+        pass

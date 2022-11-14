@@ -7,10 +7,12 @@ skip-string-normalization = true
 extend-exclude = "/templates"
 
 [tool.pytest.ini_options]
-addopts = ["--import-mode=importlib"]
+addopts = ["--import-mode=importlib", '-v']
 pythonpath = "src"
 markers = [
     'main: Run tests with __main__',
 	'add: Run add_a tests',
-    'commit: Reum commit tests'
+    'branch: Run branch tests',
+    'commit: Run commit tests',
+    'push: Run push tests',
 ]

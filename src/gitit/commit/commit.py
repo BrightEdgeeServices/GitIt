@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+from beetools import exec_cmd
 from git import Repo, exc as git_exc
 from pydantic import BaseModel
 
@@ -10,8 +11,8 @@ class CommitMsgSettings(BaseModel):
 
 class CommitMsgs(BaseModel):
     defcommit: str | None = 'Routine commit'
-    dc: str = 'Daily commit'
-    hf: str = 'Hotfix'
+    DC: str = 'Daily commit'
+    HF: str = 'Hotfix'
 
 
 class CommitDef:
@@ -24,7 +25,10 @@ class CommitDef:
             self.repo.close()
             sys.exit(2)
 
-        self.commit_obj = self.repo.index.commit(CommitMsgs().defcommit)
+        # The pre-commit hooks does not with self.repo.index.commit. Use
+        # beeutils.exec_cmd function to execute it in a session.
+        # self.commit_obj = self.repo.index.commit(CommitMsgs().defcommit)
+        self.rc = exec_cmd(['git', 'commit', '-m', CommitMsgs().defcommit])
         self.repo.close()
         pass
 
@@ -40,7 +44,10 @@ class CommitCust:
             self.repo.close()
             sys.exit(2)
 
-        self.commit_obj = self.repo.index.commit(self.settings.msg)
+        # The pre-commit hooks does not with self.repo.index.commit. Use
+        # beeutils.exec_cmd function to execute it in a session.
+        # self.commit_obj = self.repo.index.commit(self.settings.msg)
+        self.rc = exec_cmd(['git', 'commit', '-m', self.settings.msg])
         self.repo.close()
         pass
 
@@ -55,18 +62,13 @@ class CommitPre:
             self.repo.close()
             sys.exit(2)
 
-        self.commit_obj = self.repo.index.commit(
-            CommitMsgs().dict()[p_settings.msg.lower()]
+        # The pre-commit hooks does not with self.repo.index.commit. Use
+        # beeutils.exec_cmd function to execute it in a session.
+        # self.commit_obj = self.repo.index.commit(
+        #     CommitMsgs().dict()[p_settings.msg.upper()]
+        # )
+        self.rc = exec_cmd(
+            ['git', 'commit', '-m', CommitMsgs().dict()[p_settings.msg.upper()]]
         )
         self.repo.close()
         pass
-
-
-# class AddToMasterBranchError(Exception):
-#     def __init__(self):
-#         print(
-#             msg_error(
-#                 '\nCannot add files to repository on "master" or "main" branch, unless --master switch is set.\n'
-#             )
-#         )
-#         pass

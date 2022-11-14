@@ -1,7 +1,7 @@
 import argparse
 import sys
-from gitit.setenv import setenv
 from gitit.add import add
+from gitit.branch import branch
 from gitit.commit import commit
 
 
@@ -13,22 +13,11 @@ class ParseArgs:
         )
         self.subparsers = self.parser.add_subparsers(title='Commands')
         self.parser_add_a = None
+        self.parser_branch_new = None
         self.parser_commit_def = None
-        self.parser_commit_msg = None
+        self.parser_commit_cust = None
         self.parser_commit_pre = None
-        self.parser_setenv = None
-
-    def setenv(self):
-        self.parser_setenv = self.subparsers.add_parser(
-            'setenv',
-            help='Set the environment variables for the project.',
-            # aliases=['se']
-        )
-        self.parser_setenv.add_argument('--py-version', help='Installed python version')
-        self.parser_setenv.add_argument('--issue-prefix', help='Prefix for git issues')
-        self.parser_setenv.add_argument('--project-name', help='Project name')
-        self.parser_setenv.set_defaults(func=setenv.Environment)
-        pass
+        self.branch_new_group = None
 
     def add_a(self):
         self.parser_add_a = self.subparsers.add_parser(
@@ -43,6 +32,49 @@ class ParseArgs:
             help='Enable add to "master or "main" branches',
         )
         self.parser_add_a.set_defaults(func=add.AddA)
+        pass
+
+    def branch_new(self):
+        self.parser_branch_new = self.subparsers.add_parser(
+            'branchnew',
+            help='Create a new branch from the current or master branch.',
+        )
+        self.branch_new_group = self.parser_branch_new.add_mutually_exclusive_group()
+        self.branch_new_group.add_argument(
+            '-m',
+            '--master-branch',
+            action='store_true',
+            default=True,
+            help='Make the master branch the source fro the new branch',
+        )
+        self.branch_new_group.add_argument(
+            '-b',
+            '--current-branch',
+            action='store_false',
+            default=False,
+            help='Make the current branch the source for the new branch',
+        )
+        self.parser_branch_new.add_argument(
+            '-c',
+            '--category',
+            choices=['bugfix', 'feature', 'hotfix', 'wip'],
+            default='feature',
+            help='Category prefix',
+        )
+        self.parser_branch_new.add_argument(
+            '-i',
+            '--issue',
+            type=int,
+            required=True,
+            help='Issue number in GitHub',
+        )
+        self.parser_branch_new.add_argument(
+            '-d',
+            '--desc',
+            required=True,
+            help='Short description of the branch less than 20 characters',
+        )
+        self.parser_branch_new.set_defaults(func=branch.BranchNew)
         pass
 
     def commit_def(self):
@@ -74,6 +106,7 @@ class ParseArgs:
         self.parser_commit_pre.add_argument(
             '-m',
             '--msg',
+            choices=commit.CommitMsgs().dict().keys(),
             help='Commit a branch with a pre defined message.',
         )
         self.parser_commit_pre.set_defaults(func=commit.CommitPre)
@@ -82,11 +115,11 @@ class ParseArgs:
 
 def main():
     pa = ParseArgs()
-    pa.setenv()
     pa.add_a()
     pa.commit_def()
     pa.commit_cust()
     pa.commit_pre()
+    pa.branch_new()
     if len(sys.argv) > 1:
         # import pdb;pdb.set_trace()
         args = pa.parser.parse_args()
