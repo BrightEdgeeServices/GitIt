@@ -1,3 +1,37 @@
+# GitItPyTest
+
+This repository in used by the Git-It utility.  The ``push`` test must connect
+to anonline
+
+## Dependencies
+
+- Python 3.10
+- FastAPI
+- uvicorn
+- Docker
+
+## Running Locally
+
+There are two approaches to running the API locally.
+
+**Run the API directly**
+
+```
+> python3.10 -m venv .venv
+> source .venv/bin/activate
+> pip install --upgrade pip
+> pip install -r requirements.txt
+> ./run.sh
+```
+
+**Run the API via Docker Compose**
+
+Make sure the environment variables are set in the current environment.
+
+```bash
+export PROJECT_ID=$(gcloud config get-value project)
+export GCP_KEY_PATH=[path to the service account credential file]
+```
 Project Short Description (default ini)
 
     Project long description or extended summary goes in here (default ini)
@@ -44,4 +78,3 @@ Releases are published automatically when a tag is pushed to GitHub.
 
     # Push
     git push upstream --tags
-

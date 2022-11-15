@@ -3,6 +3,7 @@ import sys
 from gitit.add import add
 from gitit.branch import branch
 from gitit.commit import commit
+from gitit.push import push
 
 
 class ParseArgs:
@@ -11,13 +12,15 @@ class ParseArgs:
             prog='gitit',
             description='Facilitate the standardization of git commands in a project',
         )
-        self.subparsers = self.parser.add_subparsers(title='Commands')
+        self.branch_new_group = None
         self.parser_add_a = None
         self.parser_branch_new = None
         self.parser_commit_def = None
         self.parser_commit_cust = None
         self.parser_commit_pre = None
-        self.branch_new_group = None
+        self.parser_push = None
+        self.parser_push_tag = None
+        self.subparsers = self.parser.add_subparsers(title='Commands')
 
     def add_a(self):
         self.parser_add_a = self.subparsers.add_parser(
@@ -112,16 +115,38 @@ class ParseArgs:
         self.parser_commit_pre.set_defaults(func=commit.CommitPre)
         pass
 
+    def push(self):
+        self.parser_push = self.subparsers.add_parser(
+            'push',
+            help='Push branch to the remote repository.',
+        )
+        self.parser_push.set_defaults(func=push.Push)
+        pass
+
+    def push_tag(self):
+        self.parser_push_tag = self.subparsers.add_parser(
+            'pushtag',
+            help='Tag a branch and push it to the remote repository.',
+        )
+        self.parser_push_tag.add_argument(
+            '-t',
+            '--tag',
+            help='Add a tag in the semantic version format (major.minor.patch).',
+        )
+        self.parser_push_tag.set_defaults(func=commit.PushTag)
+        pass
+
 
 def main():
     pa = ParseArgs()
     pa.add_a()
+    pa.branch_new()
     pa.commit_def()
     pa.commit_cust()
     pa.commit_pre()
-    pa.branch_new()
+    pa.push()
+    pa.push_tag()
     if len(sys.argv) > 1:
-        # import pdb;pdb.set_trace()
         args = pa.parser.parse_args()
         args.func(args)
     else:

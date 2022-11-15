@@ -21,7 +21,10 @@ class EnvSetUp:
         self.dir = WorkingDir().dir
         pass
 
-    def make_structure(self):
+    def make_structure(self, p_sub_dir=None):
+        if p_sub_dir:
+            self.dir = self.dir / p_sub_dir
+            self.dir.mkdir()
         gitignore_path = self.dir / '.gitignore'
         untracked_dir = self.dir / 'untracked'
         tracked_dir = self.dir / 'tracked'

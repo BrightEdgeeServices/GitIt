@@ -281,18 +281,31 @@ class TestCommit:
 class TestPush:
     def test_push(self, monkeypatch, env_setup_self_destruct):
         env_setup = env_setup_self_destruct
-        env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'push'])
+        env_setup.make_structure('loc_repo')
 
-        repo = Repo.init(env_setup.dir, bare=False)
-        os.chdir(env_setup.dir)
-        repo.git.add(all=True)
-        repo.index.commit("Commit original files")
-        repo.close()
-        pa = __main__.ParseArgs()
-        pa.branch_new()
-        args = pa.parser.parse_args()
-        obj = args.func(args)
+        # new_repo = orig_repo.clone(env_setup)
+        loc_repo = Repo.init(env_setup.dir, bare=False)
+        loc_repo.git.add(all=True)
+        loc_repo.index.commit("Commit original files")
+        loc_repo.close()
 
-        assert obj.branch_name == repo.head.ref.name
+        rem_repo_dir = env_setup.dir.parent / 'rem_repo'
+        rem_repo_dir.mkdir()
+        rem_repo = Repo.init(rem_repo_dir, bare=True)
+
+        assert loc_repo.__class__ is Repo  # clone an existing repository
+        assert rem_repo.__class__ is Repo  # clone an existing repository
+
+        # repo = Repo.init(env_setup.dir, bare=False)
+        # os.chdir(env_setup.dir)
+        # repo.git.add(all=True)
+        # repo.index.commit("Commit original files")
+        # repo.close()
+        # pa = __main__.ParseArgs()
+        # pa.push()
+        # args = pa.parser.parse_args()
+        # obj = args.func(args)
+        #
+        # assert obj.branch_name == repo.head.ref.name
         pass
