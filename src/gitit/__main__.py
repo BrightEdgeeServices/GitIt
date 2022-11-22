@@ -120,6 +120,12 @@ class ParseArgs:
             'push',
             help='Push branch to the remote repository.',
         )
+        self.parser_push.add_argument(
+            '-r',
+            '--refspec',
+            default=False,
+            help='Branch name to push.',
+        )
         self.parser_push.set_defaults(func=push.Push)
         pass
 
@@ -133,7 +139,7 @@ class ParseArgs:
             '--tag',
             help='Add a tag in the semantic version format (major.minor.patch).',
         )
-        self.parser_push_tag.set_defaults(func=commit.PushTag)
+        self.parser_push_tag.set_defaults(func=push.PushTag)
         pass
 
 
