@@ -12,6 +12,7 @@ class CommitMsgSettings(BaseModel):
 class CommitMsgs(BaseModel):
     defcommit: str | None = 'Routine commit'
     DC: str = 'Daily commit'
+    RC: str = 'Regular commit'
     HF: str = 'Hotfix'
 
 
@@ -28,6 +29,7 @@ class CommitDef:
         # The pre-commit hooks does not with self.repo.index.commit. Use
         # beeutils.exec_cmd function to execute it in a session.
         # self.commit_obj = self.repo.index.commit(CommitMsgs().defcommit)
+        self.rc = exec_cmd(['git', 'commit', '-m', CommitMsgs().defcommit])
         self.rc = exec_cmd(['git', 'commit', '-m', CommitMsgs().defcommit])
         self.repo.close()
         pass
@@ -48,6 +50,7 @@ class CommitCust:
         # beeutils.exec_cmd function to execute it in a session.
         # self.commit_obj = self.repo.index.commit(self.settings.msg)
         self.rc = exec_cmd(['git', 'commit', '-m', self.settings.msg])
+        self.rc = exec_cmd(['git', 'commit', '-m', self.settings.msg])
         self.repo.close()
         pass
 
@@ -64,11 +67,10 @@ class CommitPre:
 
         # The pre-commit hooks does not with self.repo.index.commit. Use
         # beeutils.exec_cmd function to execute it in a session.
-        # self.commit_obj = self.repo.index.commit(
-        #     CommitMsgs().dict()[p_settings.msg.upper()]
-        # )
-        self.rc = exec_cmd(
-            ['git', 'commit', '-m', CommitMsgs().dict()[p_settings.msg.upper()]]
-        )
+        if p_settings.msg:
+            msg = CommitMsgs().dict()[p_settings.msg.upper()]
+            self.rc = exec_cmd(['git', 'commit', '-m', msg])
+            if self.rc != 1:
+                self.rc = exec_cmd(['git', 'commit', '-m', msg])
         self.repo.close()
         pass

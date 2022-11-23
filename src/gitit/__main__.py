@@ -4,6 +4,7 @@ from gitit.add import add
 from gitit.branch import branch
 from gitit.commit import commit
 from gitit.push import push
+from gitit.tag import tag
 
 
 class ParseArgs:
@@ -104,11 +105,10 @@ class ParseArgs:
     def commit_pre(self):
         self.parser_commit_pre = self.subparsers.add_parser(
             'commitpre',
-            help='Commit a branch with the default message.',
+            help='Commit a branch with a predefined message.',
         )
         self.parser_commit_pre.add_argument(
-            '-m',
-            '--msg',
+            'msg',
             choices=commit.CommitMsgs().dict().keys(),
             help='Commit a branch with a pre defined message.',
         )
@@ -135,11 +135,27 @@ class ParseArgs:
             help='Tag a branch and push it to the remote repository.',
         )
         self.parser_push_tag.add_argument(
-            '-t',
-            '--tag',
+            '--refspec',
+            default='master',
+            help='Branch name to push.',
+        )
+        self.parser_push_tag.add_argument(
+            '--release',
             help='Add a tag in the semantic version format (major.minor.patch).',
         )
         self.parser_push_tag.set_defaults(func=push.PushTag)
+        pass
+
+    def tag(self):
+        self.parser_tag = self.subparsers.add_parser(
+            'tag',
+            help='Tag a branch.',
+        )
+        self.parser_tag.add_argument(
+            'release',
+            help='Symantic release.',
+        )
+        self.parser_tag.set_defaults(func=tag.Tag)
         pass
 
 
@@ -152,6 +168,7 @@ def main():
     pa.commit_pre()
     pa.push()
     pa.push_tag()
+    pa.tag()
     if len(sys.argv) > 1:
         args = pa.parser.parse_args()
         args.func(args)
