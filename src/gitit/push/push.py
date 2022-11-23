@@ -2,6 +2,7 @@ from pathlib import Path
 import sys
 from git import Repo, exc as git_exc
 from pydantic import BaseModel
+from gitit.tag import tag
 
 
 class CommitMsgSettings(BaseModel):
@@ -44,7 +45,7 @@ class PushTag:
             self.repo.close()
             sys.exit(2)
 
-        # self.repo.git.push()
+        tag.Tag(p_settings)
         origin = self.repo.remotes.origin
         if p_settings.refspec:
             origin.push(refspec=p_settings.refspec)
