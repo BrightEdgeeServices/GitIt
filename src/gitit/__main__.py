@@ -136,7 +136,7 @@ class ParseArgs:
         )
         self.parser_push_tag.add_argument(
             '--refspec',
-            default=False,
+            default='master',
             help='Branch name to push.',
         )
         self.parser_push_tag.add_argument(

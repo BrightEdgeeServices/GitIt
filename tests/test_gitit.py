@@ -318,7 +318,7 @@ class TestPush:
         "tag",
         [
             ['--refspec', 'master', '--release', '0.0.0'],
-            [],
+            # [],
         ],
     )
     def test_push_tag(self, monkeypatch, env_setup_secure_self_destruct, tag):
@@ -363,6 +363,27 @@ class TestTag:
         pa = __main__.ParseArgs()
         pa.tag()
         args = pa.parser.parse_args()
+        obj = args.func(args)
+
+        assert obj.repo.tags['0.0.0']
+        pass
+
+    @pytest.mark.xfail
+    def test_tag_duplicate(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        monkeypatch.setattr("sys.argv", ["pytest", "tag", '0.0.0'])
+        env_setup.make_structure()
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.git.commit(message="Commit original files")
+        repo.close()
+
+        pa = __main__.ParseArgs()
+        pa.tag()
+        args = pa.parser.parse_args()
+        obj = args.func(args)
         obj = args.func(args)
 
         assert obj.repo.tags['0.0.0']

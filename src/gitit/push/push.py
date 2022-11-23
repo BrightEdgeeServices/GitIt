@@ -45,11 +45,8 @@ class PushTag:
             self.repo.close()
             sys.exit(2)
 
-        tag.Tag(p_settings)
+        self.rc = tag.Tag(p_settings)
         origin = self.repo.remotes.origin
-        if p_settings.refspec:
-            origin.push(refspec=p_settings.refspec)
-        else:
-            origin.push(all=True)
+        origin.push(tags=True)
         self.repo.close()
         pass
