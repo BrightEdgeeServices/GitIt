@@ -274,6 +274,8 @@ class TestCommit:
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
         repo.git.add(all=True)
+        repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        repo.git.config("user.name", "Soembody Somewhere", local=True)
         repo.close()
         pa = __main__.ParseArgs()
         pa.commit_pre()
@@ -287,7 +289,7 @@ class TestCommit:
 
 @pytest.mark.push
 class TestPush:
-    @pytest.mark.parametrize("refspec", [[], ['--refspec', 'master'], ['-r', 'master']])
+    @pytest.mark.parametrize("refspec", [[], ["--refspec", "master"], ["-r", "master"]])
     def test_push(self, monkeypatch, env_setup_secure_self_destruct, refspec):
         env_setup = env_setup_secure_self_destruct
         monkeypatch.setattr("sys.argv", ["pytest", "push"] + refspec)
@@ -299,7 +301,7 @@ class TestPush:
         loc_repo.git.commit(message="Commit original files")
         loc_repo.close()
 
-        rem_repo_dir = env_setup.dir.parent / 'rem_repo'
+        rem_repo_dir = env_setup.dir.parent / "rem_repo"
         rem_repo_dir.mkdir()
         Repo.init(rem_repo_dir, bare=True)
         loc_repo.create_remote("origin", rem_repo_dir)
@@ -317,7 +319,7 @@ class TestPush:
     @pytest.mark.parametrize(
         "tag",
         [
-            ['--refspec', 'master', '--release', '0.0.0'],
+            ["--refspec", "master", "--release", "0.0.0"],
             # [],
         ],
     )
@@ -332,7 +334,7 @@ class TestPush:
         loc_repo.git.commit(message="Commit original files")
         loc_repo.close()
 
-        rem_repo_dir = env_setup.dir.parent / 'rem_repo'
+        rem_repo_dir = env_setup.dir.parent / "rem_repo"
         rem_repo_dir.mkdir()
         Repo.init(rem_repo_dir, bare=True)
         loc_repo.create_remote("origin", rem_repo_dir)
@@ -343,7 +345,7 @@ class TestPush:
         obj = args.func(args)
 
         assert obj.repo.remotes.origin.url == loc_repo.remotes.origin.url
-        assert obj.repo.tags['0.0.0']
+        assert obj.repo.tags["0.0.0"]
         pass
 
 
@@ -351,7 +353,7 @@ class TestPush:
 class TestTag:
     def test_tag(self, monkeypatch, env_setup_secure_self_destruct):
         env_setup = env_setup_secure_self_destruct
-        monkeypatch.setattr("sys.argv", ["pytest", "tag", '0.0.0'])
+        monkeypatch.setattr("sys.argv", ["pytest", "tag", "0.0.0"])
         env_setup.make_structure()
 
         repo = Repo.init(env_setup.dir, bare=False)
@@ -365,13 +367,13 @@ class TestTag:
         args = pa.parser.parse_args()
         obj = args.func(args)
 
-        assert obj.repo.tags['0.0.0']
+        assert obj.repo.tags["0.0.0"]
         pass
 
     @pytest.mark.xfail
     def test_tag_duplicate(self, monkeypatch, env_setup_secure_self_destruct):
         env_setup = env_setup_secure_self_destruct
-        monkeypatch.setattr("sys.argv", ["pytest", "tag", '0.0.0'])
+        monkeypatch.setattr("sys.argv", ["pytest", "tag", "0.0.0"])
         env_setup.make_structure()
 
         repo = Repo.init(env_setup.dir, bare=False)
@@ -386,5 +388,5 @@ class TestTag:
         obj = args.func(args)
         obj = args.func(args)
 
-        assert obj.repo.tags['0.0.0']
+        assert obj.repo.tags["0.0.0"]
         pass
