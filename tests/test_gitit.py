@@ -367,6 +367,8 @@ class TestTag:
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
         repo.git.add(all=True)
+        repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        repo.git.config("user.name", "Soembody Somewhere", local=True)
         repo.git.commit(message="Commit original files")
         repo.close()
 
