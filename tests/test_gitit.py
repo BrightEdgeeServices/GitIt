@@ -302,6 +302,8 @@ class TestPush:
         loc_repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
         loc_repo.git.add(all=True)
+        loc_repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        loc_repo.git.config("user.name", "Soembody Somewhere", local=True)
         loc_repo.git.commit(message="Commit original files")
         loc_repo.close()
 
