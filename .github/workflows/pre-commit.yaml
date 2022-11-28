@@ -1,5 +1,5 @@
 name: Pre-Commit
-on: [pull_request, push, workflow_dispatch]
+on: [push, workflow_dispatch]
 
 jobs:
   lint:
