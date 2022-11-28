@@ -1,5 +1,10 @@
+[0.0.12]
+Title = "Version 0.0.12"
+Description = [ 'Add __init__ file to branch, commit, push and tag']
+GitHubIssues = []
+
 [0.0.11]
-Title = "Version 0.0.10"
+Title = "Version 0.0.121"
 Description = [ 'Take #2', 'Minimum value proposition.', 'Implemented commit, push and tag']
 GitHubIssues = []
 
