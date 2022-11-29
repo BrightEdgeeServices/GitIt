@@ -115,18 +115,20 @@ class ParseArgs:
         self.parser_commit_pre.set_defaults(func=commit.CommitPre)
         pass
 
-    def push(self):
+    def push_all(self):
         self.parser_push = self.subparsers.add_parser(
-            'push',
-            help='Push branch to the remote repository.',
+            'pushall',
+            help='Push master branch to the remote repository.',
         )
-        self.parser_push.add_argument(
-            '-r',
-            '--refspec',
-            default=None,
-            help='Branch name to push.',
+        self.parser_push.set_defaults(func=push.PushAll)
+        pass
+
+    def push_master(self):
+        self.parser_push = self.subparsers.add_parser(
+            'pushmaster',
+            help='Push master branch to the remote repository.',
         )
-        self.parser_push.set_defaults(func=push.Push)
+        self.parser_push.set_defaults(func=push.PushMaster)
         pass
 
     def push_tag(self):
@@ -140,6 +142,14 @@ class ParseArgs:
             help='Add a tag in the semantic version format (major.minor.patch).',
         )
         self.parser_push_tag.set_defaults(func=push.PushTag)
+        pass
+
+    def push_work(self):
+        self.parser_push = self.subparsers.add_parser(
+            'pushwork',
+            help='Push branch to the remote repository.',
+        )
+        self.parser_push.set_defaults(func=push.PushWork)
         pass
 
     def tag(self):
@@ -162,8 +172,10 @@ def main():
     pa.commit_def()
     pa.commit_cust()
     pa.commit_pre()
-    pa.push()
+    pa.push_all()
+    pa.push_master()
     pa.push_tag()
+    pa.push_work()
     pa.tag()
     if len(sys.argv) > 1:
         args = pa.parser.parse_args()
