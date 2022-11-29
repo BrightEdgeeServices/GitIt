@@ -325,14 +325,15 @@ class TestPush:
     @pytest.mark.parametrize(
         "tag",
         [
-            ["--refspec", "master", "--release", "0.0.0"],
             # [],
+            ['--release', '0.0.0'],
         ],
     )
     def test_push_tag(self, monkeypatch, env_setup_secure_self_destruct, tag):
         env_setup = env_setup_secure_self_destruct
         monkeypatch.setattr("sys.argv", ["pytest", "pushtag"] + tag)
         env_setup.make_structure("loc_repo")
+        (env_setup.dir / "setup.cfg").write_text('[metadata]\nversion = 0.0.0')
 
         loc_repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -395,7 +396,7 @@ class TestTag:
         pa = __main__.ParseArgs()
         pa.tag()
         args = pa.parser.parse_args()
-        obj = args.func(args)
+        args.func(args)
         obj = args.func(args)
 
         assert obj.repo.tags["0.0.0"]
