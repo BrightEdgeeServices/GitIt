@@ -1,3 +1,38 @@
+[0.0.16]
+Title = "Version 0.0.16"
+Description = [ '']
+GitHubIssues = [11]
+
+[0.0.15]
+Title = "Version 0.0.15"
+Description = [ 'Add pushall, pushmaster and pushwork']
+GitHubIssues = []
+
+[0.0.14]
+Title = "Version 0.0.14"
+Description = [ 'Sort out "gitlab" in .pre-commit-config.yaml']
+GitHubIssues = []
+
+[0.0.13]
+Title = "Version 0.0.13"
+Description = [ 'Take 2: Add __init__ file to branch, commit, push and tag']
+GitHubIssues = []
+
+[0.0.12]
+Title = "Version 0.0.12"
+Description = [ 'Add __init__ file to branch, commit, push and tag']
+GitHubIssues = []
+
+[0.0.11]
+Title = "Version 0.0.11"
+Description = [ 'Take #2', 'Minimum value proposition.', 'Implemented commit, push and tag']
+GitHubIssues = []
+
+[0.0.10]
+Title = "Version 0.0.10"
+Description = [ 'Minimum value proposition.', 'Implemented commit, push and tag']
+GitHubIssues = []
+
 [0.0.9]
 Title = "Version 0.0.9"
 Description = [ 'Build branchnew.', 'Fixed the pre-commit hooks that did not work.']
