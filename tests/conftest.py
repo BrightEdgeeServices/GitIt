@@ -45,7 +45,7 @@ class EnvSetUp:
         (untracked_dir / "untracked02.py").touch()
         (tracked_dir / "tracked01.py").touch()
         (tracked_dir / "tracked02.py").touch()
-        (github_dir / "ISSUE_TEMPLATE" / "bug.md").touch()
+        (github_dir / "ISSUE_TEMPLATE" / "bugfix.md").touch()
         (github_dir / "ISSUE_TEMPLATE" / "config.yaml").touch()
         (github_dir / "workflows" / "ci.yaml").touch()
         (github_dir / "workflows" / "release.yml").touch()

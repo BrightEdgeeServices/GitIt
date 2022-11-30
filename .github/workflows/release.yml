@@ -1,9 +1,6 @@
 name: Distribute to PyPI
 
-on:
-  pull_request:
-  push:
-    branches: [main, master]
+on: [pull_request]
 
 jobs:
   ReleaseToPyPi:

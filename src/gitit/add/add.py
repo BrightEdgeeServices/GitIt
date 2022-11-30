@@ -10,7 +10,7 @@ class AddASettings(BaseModel):
 
 
 class AddA:
-    def __init__(self, p_settings=None):
+    def __init__(self, p_settings=None, config=None):
         self.settings = AddASettings(master=p_settings.master)
         cwd = Path().cwd()
         try:
@@ -27,6 +27,7 @@ class AddA:
             files_to_add = [
                 x.a_path for x in self.repo.index.diff(None)
             ] + self.repo.untracked_files
+            print(f'On branch {self.repo.active_branch.name}')
             for filename in files_to_add:
                 print(f'Adding {filename}')
             self.repo.git.add(all=True)

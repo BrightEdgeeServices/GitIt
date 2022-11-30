@@ -1,6 +1,9 @@
 name: Pre-Commit
 on: [push, workflow_dispatch]
 
+env:
+  GITIT_ISSUE_PREFIX: BEE
+
 jobs:
   lint:
     runs-on: ${{ matrix.os }}

@@ -15,9 +15,8 @@ class CommitMsgs(BaseModel):
     RC: str = 'Regular commit'
     HF: str = 'Hotfix'
 
-
 class CommitDef:
-    def __init__(self, p_settings=None):
+    def __init__(self, p_settings=None, config=None):
         cwd = Path().cwd()
         try:
             self.repo = Repo(cwd)
@@ -36,7 +35,7 @@ class CommitDef:
 
 
 class CommitCust:
-    def __init__(self, p_settings=None):
+    def __init__(self, p_settings=None, config=None):
         self.settings = CommitMsgSettings(msg=p_settings.msg)
         cwd = Path().cwd()
         try:
@@ -56,7 +55,7 @@ class CommitCust:
 
 
 class CommitPre:
-    def __init__(self, p_settings):
+    def __init__(self, p_settings, config=None):
         cwd = Path().cwd()
         try:
             self.repo = Repo(cwd)
