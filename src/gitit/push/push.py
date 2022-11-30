@@ -2,6 +2,7 @@ import configparser
 from pathlib import Path
 import sys
 from git import Repo, exc as git_exc
+from gitit.tag import tag
 
 # from pydantic import BaseModel
 from gitit.tag import tag

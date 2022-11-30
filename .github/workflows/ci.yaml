@@ -1,6 +1,6 @@
 name: CI
 
-on: [pull_request, push, workflow_dispatch]
+on: [push, workflow_dispatch]
 
 env:
   GITIT_ISSUE_PREFIX: BEE
@@ -12,7 +12,7 @@ jobs:
       fail-fast: true
       matrix:
         os: ["ubuntu-latest"]
-        python-version: ["3.10"]
+        python-version: ["3.10.8"]
 
     steps:
       - name: Checkout source

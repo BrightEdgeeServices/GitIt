@@ -112,11 +112,10 @@ class ParseArgs:
     def commit_pre(self):
         self.parser_commit_pre = self.subparsers.add_parser(
             'commitpre',
-            help='Commit a branch with the default message.',
+            help='Commit a branch with a predefined message.',
         )
         self.parser_commit_pre.add_argument(
-            '-m',
-            '--msg',
+            'msg',
             choices=commit.CommitMsgs().dict().keys(),
             help='Commit a branch with a pre defined message.',
         )
