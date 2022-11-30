@@ -1,5 +1,6 @@
 import argparse
 import sys
+from config import Config
 from gitit.add import add
 from gitit.branch import branch
 from gitit.commit import commit
@@ -48,7 +49,7 @@ class ParseArgs:
             '--master-branch',
             action='store_true',
             default=True,
-            help='Make the master branch the source fro the new branch',
+            help='Make the master branch the source for the new branch',
         )
         self.branch_new_group.add_argument(
             '-b',
@@ -60,7 +61,7 @@ class ParseArgs:
         self.parser_branch_new.add_argument(
             '-c',
             '--category',
-            choices=['bugfix', 'feature', 'hotfix', 'wip'],
+            choices=['bugfix', 'feature', 'hotfix'],
             default='feature',
             help='Category prefix',
         )
@@ -76,6 +77,13 @@ class ParseArgs:
             '--desc',
             required=True,
             help='Short description of the branch less than 20 characters',
+        )
+        self.parser_branch_new.add_argument(
+            '-s',
+            '--stash',
+            action='store_true',
+            default='True',
+            help='Stash files in a dirty repository.',
         )
         self.parser_branch_new.set_defaults(func=branch.BranchNew)
         pass
@@ -154,7 +162,7 @@ def main():
     pa.push_tag()
     if len(sys.argv) > 1:
         args = pa.parser.parse_args()
-        args.func(args)
+        args.func(args, Config())
     else:
         pa.parser.print_help()
         sys.exit(2)

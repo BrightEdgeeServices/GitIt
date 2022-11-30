@@ -1,8 +1,8 @@
 """Testing gitit__init__()"""
 import os
 from pathlib import Path
-
 import pytest
+from config import Config
 from git import Repo
 from gitit.add.add import AddToMasterBranchError
 from gitit import __main__
@@ -39,7 +39,7 @@ class TestAdd:
         repo = Repo.init(env_setup.dir, bare=False)
 
         assert [f[0][0] for f in list(repo.index.entries.items())] == [
-            ".github/ISSUE_TEMPLATE/bug.md",
+            ".github/ISSUE_TEMPLATE/bugfix.md",
             ".github/ISSUE_TEMPLATE/config.yaml",
             ".github/workflows/ci.yaml",
             ".github/workflows/release.yml",
@@ -79,7 +79,7 @@ class TestAdd:
         repo = Repo(env_setup.dir)
         assert [x.a_path for x in repo.index.diff(None)] == []
         assert [f[0][0] for f in list(repo.index.entries.items())] == [
-            ".github/ISSUE_TEMPLATE/bug.md",
+            ".github/ISSUE_TEMPLATE/bugfix.md",
             ".github/ISSUE_TEMPLATE/config.yaml",
             ".github/workflows/ci.yaml",
             ".github/workflows/release.yml",
@@ -116,7 +116,7 @@ class TestAdd:
         repo = Repo(env_setup.dir)
         assert [x.a_path for x in repo.index.diff(None)] == []
         assert [f[0][0] for f in list(repo.index.entries.items())] == [
-            ".github/ISSUE_TEMPLATE/bug.md",
+            ".github/ISSUE_TEMPLATE/bugfix.md",
             ".github/ISSUE_TEMPLATE/config.yaml",
             ".github/workflows/ci.yaml",
             ".github/workflows/release.yml",
@@ -155,7 +155,7 @@ class TestAdd:
         repo = Repo(env_setup.dir)
         assert [x.a_path for x in repo.index.diff(None)] == []
         assert [f[0][0] for f in list(repo.index.entries.items())] == [
-            ".github/ISSUE_TEMPLATE/bug.md",
+            ".github/ISSUE_TEMPLATE/bugfix.md",
             ".github/ISSUE_TEMPLATE/config.yaml",
             ".github/workflows/ci.yaml",
             ".github/workflows/release.yml",
@@ -187,23 +187,28 @@ class TestAdd:
 
 @pytest.mark.branch
 class TestBranch:
-    def test_branch_new(self, monkeypatch, env_setup_secure_self_destruct):
+    @pytest.mark.parametrize(
+        "param",
+        [
+            [
+                "-m",
+                "-i",
+                "1",
+                "-c",
+                "feature",
+                "--d",
+                "My_first_branch",
+                '-s',
+            ],
+            ["-b", "-i", "1", "-c", "feature", "--d", "My_first_branch"],
+        ],
+    )
+    def test_branch_new_clean(self, monkeypatch, env_setup_secure_self_destruct, param):
         env_setup = env_setup_secure_self_destruct
         env_setup.make_structure()
-        monkeypatch.setattr(
-            "sys.argv",
-            [
-                "pytest",
-                "branchnew",
-                "--master-branch",
-                "--issue",
-                "1",
-                "--category",
-                "feature",
-                "--desc",
-                "My_first_branch",
-            ],
-        )
+        monkeypatch.setattr("sys.argv", ["pytest", "branchnew"] + param)
+        config = Config()
+        config.GITIT_ISSUE_PREFIX = 'BEE'
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -213,7 +218,130 @@ class TestBranch:
         pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
-        obj = args.func(args)
+        obj = args.func(args, config)
+
+        assert obj.branch_name == repo.head.ref.name
+        pass
+
+    @pytest.mark.parametrize(
+        "param",
+        [
+            [
+                "-m",
+                "-i",
+                "1",
+                "-c",
+                "feature",
+                "--d",
+                "My_first_branch",
+                '-s',
+            ],
+            ["-b", "-i", "1", "-c", "feature", "--d", "My_first_branch"],
+        ],
+    )
+    def test_branch_new_untracked(
+        self, monkeypatch, env_setup_secure_self_destruct, param
+    ):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr("sys.argv", ["pytest", "branchnew"] + param)
+        config = Config()
+        config.GITIT_ISSUE_PREFIX = 'BEE'
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.index.commit("Commit original files")
+        (env_setup.dir / 'setup.cfg').touch()
+        # repo.git.add(all = True)
+        repo.close()
+        pa = __main__.ParseArgs()
+        pa.branch_new()
+        args = pa.parser.parse_args()
+        obj = args.func(args, config)
+
+        assert obj.branch_name == repo.head.ref.name
+        pass
+
+    @pytest.mark.parametrize(
+        "param",
+        [
+            [
+                "-m",
+                "-i",
+                "1",
+                "-c",
+                "feature",
+                "--d",
+                "My_first_branch",
+                '-s',
+            ],
+            ["-b", "-i", "1", "-c", "feature", "--d", "My_first_branch"],
+        ],
+    )
+    def test_branch_new_tracked(
+        self, monkeypatch, env_setup_secure_self_destruct, param
+    ):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr("sys.argv", ["pytest", "branchnew"] + param)
+        config = Config()
+        config.GITIT_ISSUE_PREFIX = 'BEE'
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.index.commit("Commit original files")
+        (env_setup.dir / 'setup.cfg').touch()
+        repo.git.add(all=True)
+        repo.close()
+        pa = __main__.ParseArgs()
+        pa.branch_new()
+        args = pa.parser.parse_args()
+        obj = args.func(args, config)
+
+        assert obj.branch_name == repo.head.ref.name
+        pass
+
+    @pytest.mark.parametrize(
+        "param",
+        [
+            [
+                "-m",
+                "-i",
+                "1",
+                "-c",
+                "feature",
+                "--d",
+                "My_first_branch",
+                '-s',
+            ],
+            ["-b", "-i", "1", "-c", "feature", "--d", "My_first_branch"],
+        ],
+    )
+    def test_branch_new_not_on_master(
+        self, monkeypatch, env_setup_secure_self_destruct, param
+    ):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr("sys.argv", ["pytest", "branchnew"] + param)
+        config = Config()
+        config.GITIT_ISSUE_PREFIX = 'BEE'
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        repo.git.add(all=True)
+        repo.index.commit("Commit original files")
+        repo.git.checkout('HEAD', b='Test_branch')
+        (env_setup.dir / 'commited.txt').write_text('Delete me')
+        repo.git.add(all=True)
+        (env_setup.dir / 'setup.cfg').touch()
+        (env_setup.dir / 'tracked.txt').write_text('Delete me')
+        repo.close()
+        pa = __main__.ParseArgs()
+        pa.branch_new()
+        args = pa.parser.parse_args()
+        obj = args.func(args, config)
 
         assert obj.branch_name == repo.head.ref.name
         pass
