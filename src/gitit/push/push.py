@@ -19,6 +19,7 @@ class PushAll:
 
         origin = self.repo.remotes.origin
         origin.push(all=True)
+        print(f'On branch {self.repo.active_branch.name}')
         self.repo.close()
         pass
 
@@ -35,6 +36,7 @@ class PushMaster:
 
         origin = self.repo.remotes.origin
         origin.push(refspec='master')
+        print(f'On branch {self.repo.active_branch.name}')
         self.repo.close()
         pass
 
@@ -57,6 +59,7 @@ class PushTag:
         self.rc = tag.Tag(p_settings)
         origin = self.repo.remotes.origin
         origin.push(tags=True)
+        print(f'On branch {self.repo.active_branch.name}')
         self.repo.close()
         pass
 
@@ -73,5 +76,6 @@ class PushWork:
 
         origin = self.repo.remotes.origin
         origin.push(refspec=self.repo.active_branch.name)
+        print(f'On branch {self.repo.active_branch.name}')
         self.repo.close()
         pass
