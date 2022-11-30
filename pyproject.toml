@@ -15,4 +15,5 @@ markers = [
     'branch: Run branch tests',
     'commit: Run commit tests',
     'push: Run push tests',
+    'tag: Run tag tests',
 ]
