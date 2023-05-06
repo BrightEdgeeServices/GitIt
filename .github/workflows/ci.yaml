@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, workflow_dispatch]
+on: push
 
 env:
   GITIT_ISSUE_PREFIX: BEE

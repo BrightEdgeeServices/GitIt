@@ -1,25 +1,28 @@
 ---
 name: BugFix Report
 about: Report a bug in the system
-title: "[BugFIx]: "
+title: "[BugFix]: "
 labels:
   - bugfix
 ---
 
-**What happened**:
+**Describe the problem**:
+`
+**Command executed**:
 
-**What you expected to happen**:
+```bash
+
+```
+
+**List the source code file(s) and line number where you think the error is (if known)**
 
 **Minimal Complete Verifiable Example**:
 
 <!-- See http://matthewrocklin.com/blog/work/2018/02/28/minimal-bug-reports or https://stackoverflow.com/help/mcve for an example -->
-<!-- bugfix', 'feature', 'hotfix', 'wip -->
 
 ```python
 # Put your MCVE code here
 ```
-
-**Anything else we need to know?**:
 
 **Environment**:
 

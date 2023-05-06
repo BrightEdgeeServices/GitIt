@@ -1,17 +1,15 @@
 # PyCharm stuff
 .idea/
 
-# Active State
-.komodotools/
-*.komodoproject
-
-#Inhouse
+# Inhouse
 VersionArchive/
 Archive/
 TestData/*_env/
 .git/
 tmp/
 
+# Windows
+desktop.ini
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
