@@ -1,19 +1,73 @@
+[project]
+name = 'beetools'
+version = '5.0.5'
+authors = [
+    { name = 'Hendrik du Toit', email = 'hendrik@brightedge.co.za' },
+]
+description = 'Tools for batch scripts, virtual environments and utilities.'
+license = {file = 'LICENSE'}
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+	'Intended Audience :: Developers',
+	'Topic :: Software Development',
+	'Topic :: Software Development :: Version Control',
+	'Topic :: Software Development :: Version Control :: Git',
+	'License :: OSI Approved :: MIT License',
+	'Programming Language :: Python :: 3.8',
+	'Programming Language :: Python :: 3.9',
+	'Programming Language :: Python :: 3.10',
+	'Programming Language :: Python :: 3.11',
+]
+readme = {file = 'README.rst', content-type = 'text/x-rst'}
+requires-python = '>=3.8, <=12.0'
+dependencies = [
+    'termcolor',
+  ]
+
+[project.optional-dependencies]
+dev = [
+    'build',
+    'git-it',
+    'pytest',
+    'pytest-cov',
+    'rstcheck',
+    'toml',
+    'twine',
+]
+
+[project.urls]
+Changelog = 'https://github.com/BrightEdgeeServices/beetools/blob/master/CHANGES.md'
+Homepage = 'https://github.com/BrightEdgeeServices/beetools'
+
 [build-system]
-requires = [ "setuptools", "wheel",]
+requires = [
+    "setuptools >= 68",
+    "wheel",
+    "setuptools-git >= 1.1",
+]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
 skip-string-normalization = true
-extend-exclude = "/templates"
+line-length = 120
+target-version = ["py311"]
+
+[tool.codespell]
+count = ''
+quiet-level = 2
+skip = 'documentation/Archive/*'
+
+[tool.coverage.run]
+source = ['src']
 
 [tool.pytest.ini_options]
-addopts = ["--import-mode=importlib", '-v']
-pythonpath = "src"
+addopts = ['--import-mode=importlib', '-vv', '--ignore-glob=*\\Archive']
+pythonpath = ['src','src/rte-db', 'tests' ]
 markers = [
-    'main: Run tests with __main__',
-	'add: Run add_a tests',
-    'branch: Run branch tests',
-    'commit: Run commit tests',
-    'push: Run push tests',
-    'tag: Run tag tests',
+    "select: Run a selection of tests",
+    "structure_accounting: Run tests linked to accounting",
 ]
+filterwarnings = [
+#    "ignore::DeprecationWarning",
+]
+testpaths = 'tests'

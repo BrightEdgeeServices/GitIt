@@ -7,11 +7,11 @@ author = 'Hendrik du Toit'
 version = '0'
 release = '0.0.1'
 html_context = {
-    "display_github": True,  # Integrate GitHub
-    "github_user": "BrightEdgeeServices",  # Username
-    "github_repo": "gitit",  # Repo name
-    "github_version": "master",  # Version
-    "conf_py_path": "/source/",  # Path in the checkout to the docs root
+    'display_github': True,  # Integrate GitHub
+    'github_user': 'BrightEdgeeServices',  # Username
+    'github_repo': 'gitit',  # Repo name
+    'github_version': 'master',  # Version
+    'conf_py_path': '/source/',  # Path in the checkout to the docs root
 }
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary']
 templates_path = ['_templates']

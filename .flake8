@@ -1,0 +1,9 @@
+[flake8]
+exclude =
+    Archive,
+    etc/*.py,
+    VersionArchive,
+    tests/Archive
+max-line-length = 120
+# select = ["C","E","F","W","B","B950"]
+ignore = E203, E501, F811, W503,

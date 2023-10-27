@@ -5,7 +5,7 @@
 Conventions
 ===========
 
-This document explains conventions and other importnt structural information.
+This document explains conventions and other important structural information.
 
 -------------
 74 Char Limit

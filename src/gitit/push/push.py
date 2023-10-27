@@ -1,11 +1,13 @@
 import configparser
-from pathlib import Path
 import sys
-from git import Repo, exc as git_exc
+from pathlib import Path
+
+from git import exc as git_exc
+from git import Repo
+
 from gitit.tag import tag
 
 # from pydantic import BaseModel
-from gitit.tag import tag
 
 
 class PushAll:

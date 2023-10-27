@@ -1,5 +1,6 @@
 import argparse
 import sys
+
 from gitit.add import add
 from gitit.branch import branch
 from gitit.commit import commit
@@ -193,5 +194,5 @@ def main():
     pass
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
