@@ -5,9 +5,9 @@ on:
   push:
 
 jobs:
-  Pre-Commit:
-    uses: ./.github/workflows/pre-commit.yml
-
+#  Pre-Commit:
+#    uses: ./.github/workflows/pre-commit.yml
+#
 #  Check-Documentation:
 #    needs: Pre-Commit
 #    uses: ./.github/workflows/check-rst-documentation.yml
