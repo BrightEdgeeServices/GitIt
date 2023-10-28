@@ -1,0 +1,30 @@
+name: Pre-Commit
+
+on:
+  workflow_call:
+
+jobs:
+  Pre-Commit:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: ['ubuntu-latest']
+        python-version: ['3.11']
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run pre-commit checks
+        uses: pre-commit/action@v3.0.0

@@ -70,12 +70,7 @@ GitHubIssues = []
 
 [0.0.2]
 Title = "Version 0.0.2"
-Description = [ 'Fixed "set_env" import module references.',]
-GitHubIssues = []
-
-[0.0.2]
-Title = "Version 0.0.2"
-Description = [ 'Implement "set_env" & "adda"',]
+Description = [ 'Implement "set_env" & "adda"','Fixed "set_env" import module references.',]
 GitHubIssues = []
 
 [0.0.1]

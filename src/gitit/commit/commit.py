@@ -1,7 +1,9 @@
-from pathlib import Path
 import sys
+from pathlib import Path
+
 from beetools import exec_cmd
-from git import Repo, exc as git_exc
+from git import exc as git_exc
+from git import Repo
 from pydantic import BaseModel
 
 
@@ -14,6 +16,7 @@ class CommitMsgs(BaseModel):
     DC: str = 'Daily commit'
     RC: str = 'Regular commit'
     HF: str = 'Hotfix'
+
 
 class CommitDef:
     def __init__(self, p_settings=None, config=None):
