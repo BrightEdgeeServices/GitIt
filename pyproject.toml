@@ -28,6 +28,7 @@ dependencies = [
 dev = [
     'build',
     'git-it',
+    'pygments',
     'pytest',
     'pytest-cov',
     'rstcheck',

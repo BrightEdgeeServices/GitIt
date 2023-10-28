@@ -21,7 +21,7 @@ class BranchNew:
             self.repo.heads.master.checkout()
         self.branch_name = (
             f'{p_settings.category}/'
-            f'{config.GITIT_ISSUE_PREFIX}-{p_settings.issue:0>5}_'
+            f'{config.VENV_INSTITUTION}-{p_settings.issue:0>5}_'
             f'{p_settings.desc[:30].replace(" ", "_")}'
         )
         self.new_branch = self.repo.git.checkout('HEAD', b=self.branch_name)

@@ -208,7 +208,7 @@ class TestBranch:
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'branchnew'] + param)
         config = Config()
-        config.GITIT_ISSUE_PREFIX = 'BEE'
+        config.VENV_INSTITUTION = 'BEE'
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -244,7 +244,7 @@ class TestBranch:
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'branchnew'] + param)
         config = Config()
-        config.GITIT_ISSUE_PREFIX = 'BEE'
+        config.VENV_INSTITUTION = 'BEE'
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -282,7 +282,7 @@ class TestBranch:
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'branchnew'] + param)
         config = Config()
-        config.GITIT_ISSUE_PREFIX = 'BEE'
+        config.VENV_INSTITUTION = 'BEE'
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -320,7 +320,7 @@ class TestBranch:
         env_setup.make_structure()
         monkeypatch.setattr('sys.argv', ['pytest', 'branchnew'] + param)
         config = Config()
-        config.GITIT_ISSUE_PREFIX = 'BEE'
+        config.VENV_INSTITUTION = 'BEE'
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
