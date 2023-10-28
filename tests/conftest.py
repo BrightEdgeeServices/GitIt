@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from tempfile import TemporaryDirectory
 
 import pytest
-from beetools import rm_tree
+from beetools.beeutils import rm_tree
 
 
 # sys.path.append('path')

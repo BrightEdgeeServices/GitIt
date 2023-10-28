@@ -1,5 +1,5 @@
 [project]
-name = 'beetools'
+name = 'git-it'
 version = '0.1.0'
 authors = [
     { name = 'Hendrik du Toit', email = 'hendrik@brightedge.co.za' },
