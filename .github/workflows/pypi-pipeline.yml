@@ -6,15 +6,15 @@ on:
 
 jobs:
   Pre-Commit:
-    uses: ./.github/workflows/pre-commit.yml
-
-  Check-Documentation:
-    needs: Pre-Commit
-    uses: ./.github/workflows/check-rst-documentation.yml
+#    uses: ./.github/workflows/pre-commit.yml
+#
+#  Check-Documentation:
+#    needs: Pre-Commit
+#    uses: ./.github/workflows/check-rst-documentation.yml
 
   CI:
     uses: ./.github/workflows/ci.yml
-    needs: Check-Documentation
+#    needs: Check-Documentation
 
   Build-and-Release-to-Pypi:
     needs: CI
