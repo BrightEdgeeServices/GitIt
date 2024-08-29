@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from beetools import msg_error
+from beetools import msg
 from git import exc as git_exc
 from git import Repo
 from pydantic import BaseModel
@@ -18,18 +18,18 @@ class AddA:
         try:
             self.repo = Repo(cwd)
         except git_exc.InvalidGitRepositoryError:
-            print('Error: Invalid git repository')
+            print("Error: Invalid git repository")
             self.repo.close()
             sys.exit(2)
 
-        if self.repo.active_branch.name not in ['main', 'master'] or self.settings.master:
+        if self.repo.active_branch.name not in ["main", "master"] or self.settings.master:
             files_to_add = [x.a_path for x in self.repo.index.diff(None)] + self.repo.untracked_files
-            print(f'On branch {self.repo.active_branch.name}')
+            print(f"On branch {self.repo.active_branch.name}")
             for filename in files_to_add:
-                print(f'Adding {filename}')
+                print(f"Adding {filename}")
             self.repo.git.add(all=True)
             if not files_to_add:
-                print('No files to add.')
+                print("No files to add.")
         else:
             raise AddToMasterBranchError
         self.repo.close()
@@ -39,6 +39,6 @@ class AddA:
 class AddToMasterBranchError(Exception):
     def __init__(self):
         print(
-            msg_error('\nCannot add files to repository on "master" or "main" branch, unless --master switch is set.\n')
+            msg.error('\nCannot add files to repository on "master" or "main" branch, unless --master switch is set.\n')
         )
         pass

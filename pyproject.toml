@@ -1,78 +1,79 @@
-[project]
-name = 'git-it'
-version = '0.1.0'
-authors = [
-    { name = 'Hendrik du Toit', email = 'hendrik@brightedge.co.za' },
-]
-description = 'Tools for batch scripts, virtual environments and utilities.'
-license = {file = 'LICENSE'}
-classifiers = [
-    'Development Status :: 5 - Production/Stable',
-	'Intended Audience :: Developers',
-	'Topic :: Software Development',
-	'Topic :: Software Development :: Version Control',
-	'Topic :: Software Development :: Version Control :: Git',
-	'License :: OSI Approved :: MIT License',
-	'Programming Language :: Python :: 3.8',
-	'Programming Language :: Python :: 3.9',
-	'Programming Language :: Python :: 3.10',
-	'Programming Language :: Python :: 3.11',
-]
-readme = {file = 'README.rst', content-type = 'text/x-rst'}
-requires-python = '>=3.8, <=12.0'
-dependencies = [
-    'beetools',
-    'gitpython',
-    'pydantic',
-    'pygithub',
-    'termcolor',
-  ]
-
-[project.optional-dependencies]
-dev = [
-    'build',
-    'git-it',
-    'pygments',
-    'pytest',
-    'pytest-cov',
-    'rstcheck',
-    'toml',
-    'twine',
-]
-
-[project.urls]
-Changelog = 'https://github.com/BrightEdgeeServices/GitIt/blob/master/CHANGES.md'
-Homepage = 'https://github.com/BrightEdgeeServices/GitIt'
-
 [build-system]
 requires = [
-    "setuptools >= 68",
-    "wheel",
-    "setuptools-git >= 1.1",
+    "poetry-core>=1.0.0",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "poetry.core.masonry.api"
 
 [tool.black]
-skip-string-normalization = true
 line-length = 120
-target-version = ["py311"]
+target-version = ["py312"]
 
 [tool.codespell]
 count = ''
 quiet-level = 2
-skip = 'documentation/Archive/*'
 
 [tool.coverage.run]
-source = ['src']
+source = ['src', 'tests']
+
+[tool.isort]
+profile = "black"
+
+[tool.poetry]
+name = 'git-it'
+version = '0.1.0'
+description = 'Tools for batch scripts, virtual environments and utilities.'
+authors = [
+    "Hendrik du Toit <hendrik@brightedge.co.za>",
+]
+license = "file:LICENSE"
+readme = "README.md"
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Topic :: Software Development',
+    'Topic :: Software Development :: Version Control',
+    'Topic :: Software Development :: Version Control :: Git',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+]
+homepage = 'https://github.com/BrightEdgeeServices/GitIt'
+repository = "https://github.com/BrightEdgeeServices/GitIt.git"
+
+[tool.poetry.dependencies]
+python = "^3.12.2"
+beetools = "^5.1.1"
+pygithub = "^2.4.0"
+gitpython = "^3.1.43"
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+mdformat-gfm = "^0.3.6"
+mdformat-frontmatter = "^2.0.8"
+mdformat-footnote = "^0.1.1"
+pygments = "^2.16.999"
+pytest = "^8.3.2"
+pytest-cov = "^5.0.0"
+rstcheck = "^6.2.4"
+black = "^24.8.0"
+flake8 = "^7.1.1"
+pre-commit = "^3.8.0"
+
+
+[tool.poetry.urls]
+changelog = 'https://github.com/BrightEdgeeServices/GitIt/blob/master/ReleaseNotes.md'
+issues = 'https://github.com/BrightEdgeeServices/GitIt/issues'
 
 [tool.pytest.ini_options]
-addopts = ['--import-mode=importlib', '-vv', '--ignore-glob=*\\Archive']
-pythonpath = ['src','src/rte-db', 'tests' ]
+addopts = ['-vv', '--ignore-glob=*\\Archive', "--cov=./"]
+#addopts = ['--import-mode=importlib', "-v", "--cov=./", "--ignore-glob=*\\Archive", "--cov-report=html"]
 markers = [
     "select: Run a selection of tests",
     "structure_accounting: Run tests linked to accounting",
 ]
 filterwarnings = [
-#    "ignore::DeprecationWarning",
+    "ignore::DeprecationWarning",
 ]
 testpaths = 'tests'

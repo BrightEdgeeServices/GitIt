@@ -11,8 +11,8 @@ from gitit.tag import tag
 class ParseArgs:
     def __init__(self):
         self.parser = argparse.ArgumentParser(
-            prog='gitit',
-            description='Facilitate the standardization of git commands in a project',
+            prog="gitit",
+            description="Facilitate the standardization of git commands in a project",
         )
         self.branch_new_group = None
         self.parser_add_a = None
@@ -22,17 +22,17 @@ class ParseArgs:
         self.parser_commit_pre = None
         self.parser_push = None
         self.parser_push_tag = None
-        self.subparsers = self.parser.add_subparsers(title='Commands')
+        self.subparsers = self.parser.add_subparsers(title="Commands")
 
     def add_a(self):
         self.parser_add_a = self.subparsers.add_parser(
-            'adda',
+            "adda",
             help='Mimic the "git add -A" command.  Only explicitly allow adding to "main" or "master".',
         )
         self.parser_add_a.add_argument(
-            '-m',
-            '--master',
-            action='store_true',
+            "-m",
+            "--master",
+            action="store_true",
             default=False,
             help='Enable add to "master or "main" branches',
         )
@@ -41,133 +41,133 @@ class ParseArgs:
 
     def branch_new(self):
         self.parser_branch_new = self.subparsers.add_parser(
-            'branchnew',
-            help='Create a new branch from the current or master branch.',
+            "branchnew",
+            help="Create a new branch from the current or master branch.",
         )
         self.branch_new_group = self.parser_branch_new.add_mutually_exclusive_group()
         self.branch_new_group.add_argument(
-            '-m',
-            '--master-branch',
-            action='store_true',
+            "-m",
+            "--master-branch",
+            action="store_true",
             default=True,
-            help='Make the master branch the source for the new branch',
+            help="Make the master branch the source for the new branch",
         )
         self.branch_new_group.add_argument(
-            '-b',
-            '--current-branch',
-            action='store_false',
+            "-b",
+            "--current-branch",
+            action="store_false",
             default=False,
-            help='Make the current branch the source for the new branch',
+            help="Make the current branch the source for the new branch",
         )
         self.parser_branch_new.add_argument(
-            '-c',
-            '--category',
-            choices=['bugfix', 'feature', 'hotfix'],
-            default='feature',
-            help='Category prefix',
+            "-c",
+            "--category",
+            choices=["bugfix", "feature", "hotfix"],
+            default="feature",
+            help="Category prefix",
         )
         self.parser_branch_new.add_argument(
-            '-i',
-            '--issue',
+            "-i",
+            "--issue",
             type=int,
             required=True,
-            help='Issue number in GitHub',
+            help="Issue number in GitHub",
         )
         self.parser_branch_new.add_argument(
-            '-d',
-            '--desc',
+            "-d",
+            "--desc",
             required=True,
-            help='Short description of the branch less than 20 characters',
+            help="Short description of the branch less than 20 characters",
         )
         self.parser_branch_new.add_argument(
-            '-s',
-            '--stash',
-            action='store_true',
-            default='True',
-            help='Stash files in a dirty repository.',
+            "-s",
+            "--stash",
+            action="store_true",
+            default="True",
+            help="Stash files in a dirty repository.",
         )
         self.parser_branch_new.set_defaults(func=branch.BranchNew)
         pass
 
     def commit_def(self):
         self.parser_commit_def = self.subparsers.add_parser(
-            'commitdef',
-            help='Commit branch with the default message.',
+            "commitdef",
+            help="Commit branch with the default message.",
         )
         self.parser_commit_def.set_defaults(func=commit.CommitDef)
         pass
 
     def commit_cust(self):
         self.parser_commit_cust = self.subparsers.add_parser(
-            'commitcust',
-            help='Commit branch with a custom message.',
+            "commitcust",
+            help="Commit branch with a custom message.",
         )
         self.parser_commit_cust.add_argument(
-            '-m',
-            '--msg',
-            help='Custom message for the commit.',
+            "-m",
+            "--msg",
+            help="Custom message for the commit.",
         )
         self.parser_commit_cust.set_defaults(func=commit.CommitCust)
         pass
 
     def commit_pre(self):
         self.parser_commit_pre = self.subparsers.add_parser(
-            'commitpre',
-            help='Commit a branch with a predefined message.',
+            "commitpre",
+            help="Commit a branch with a predefined message.",
         )
         self.parser_commit_pre.add_argument(
-            'msg',
+            "msg",
             choices=commit.CommitMsgs().dict().keys(),
-            help='Commit a branch with a pre defined message.',
+            help="Commit a branch with a pre defined message.",
         )
         self.parser_commit_pre.set_defaults(func=commit.CommitPre)
         pass
 
     def push_all(self):
         self.parser_push = self.subparsers.add_parser(
-            'pushall',
-            help='Push master branch to the remote repository.',
+            "pushall",
+            help="Push master branch to the remote repository.",
         )
         self.parser_push.set_defaults(func=push.PushAll)
         pass
 
     def push_master(self):
         self.parser_push = self.subparsers.add_parser(
-            'pushmaster',
-            help='Push master branch to the remote repository.',
+            "pushmaster",
+            help="Push master branch to the remote repository.",
         )
         self.parser_push.set_defaults(func=push.PushMaster)
         pass
 
     def push_tag(self):
         self.parser_push_tag = self.subparsers.add_parser(
-            'pushtag',
-            help='Tag a branch and push it to the remote repository.',
+            "pushtag",
+            help="Tag a branch and push it to the remote repository.",
         )
         self.parser_push_tag.add_argument(
-            '--release',
+            "--release",
             default=None,
-            help='Add a tag in the semantic version format (major.minor.patch).',
+            help="Add a tag in the semantic version format (major.minor.patch).",
         )
         self.parser_push_tag.set_defaults(func=push.PushTag)
         pass
 
     def push_work(self):
         self.parser_push = self.subparsers.add_parser(
-            'pushwork',
-            help='Push branch to the remote repository.',
+            "pushwork",
+            help="Push branch to the remote repository.",
         )
         self.parser_push.set_defaults(func=push.PushWork)
         pass
 
     def tag(self):
         self.parser_tag = self.subparsers.add_parser(
-            'tag',
-            help='Tag a branch.',
+            "tag",
+            help="Tag a branch.",
         )
         self.parser_tag.add_argument(
-            'release',
-            help='Symantic release.',
+            "release",
+            help="Semantic release.",
         )
         self.parser_tag.set_defaults(func=tag.Tag)
         pass
@@ -194,5 +194,5 @@ def main():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

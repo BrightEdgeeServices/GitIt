@@ -1,5 +1,0 @@
-include README.rst
-include LICENSE
-include requirements.txt
-graft gitit
-recursive-exclude * *.py[co]
