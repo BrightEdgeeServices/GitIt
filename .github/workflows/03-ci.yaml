@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  workflow_call:
+
+jobs:
+  CI:
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: true
+      matrix:
+#        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: [ '3.12' ]
+#        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+        os: [ 'ubuntu-latest' ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Configure Poetry
+        run: |
+          poetry config keyring.enabled false
+
+      - name: Install dependencies
+        run: |
+          poetry install --with dev
+
+      - name: Run pytest
+        run: poetry run pytest  --cov=./
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
