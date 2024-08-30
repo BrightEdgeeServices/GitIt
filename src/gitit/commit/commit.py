@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from beetools import exec_cmd
+from beetools.beescript import exec_cmd
 from git import exc as git_exc
 from git import Repo
 from pydantic import BaseModel
@@ -19,7 +19,7 @@ class CommitMsgs(BaseModel):
 
 
 class CommitDef:
-    def __init__(self, p_settings=None, config=None):
+    def __init__(self):
         cwd = Path().cwd()
         try:
             self.repo = Repo(cwd)
@@ -28,9 +28,9 @@ class CommitDef:
             self.repo.close()
             sys.exit(2)
 
-        # The pre-commit hooks does not with self.repo.index.commit. Use
-        # beeutils.exec_cmd function to execute it in a session.
-        # self.commit_obj = self.repo.index.commit(CommitMsgs().defcommit)
+        # The pre-commit hooks do not with self.repo.index.commit.
+        # Use beeutils.exec_cmd function to execute it in a session.
+        # Self.commit_obj = self.repo.index.commit(CommitMsgs().defcommit)
         self.rc = exec_cmd(["git", "commit", "-m", CommitMsgs().defcommit])
         self.rc = exec_cmd(["git", "commit", "-m", CommitMsgs().defcommit])
         self.repo.close()
@@ -38,7 +38,7 @@ class CommitDef:
 
 
 class CommitCust:
-    def __init__(self, p_settings=None, config=None):
+    def __init__(self, p_settings=None):
         self.settings = CommitMsgSettings(msg=p_settings.msg)
         cwd = Path().cwd()
         try:
@@ -48,9 +48,9 @@ class CommitCust:
             self.repo.close()
             sys.exit(2)
 
-        # The pre-commit hooks does not with self.repo.index.commit. Use
-        # beeutils.exec_cmd function to execute it in a session.
-        # self.commit_obj = self.repo.index.commit(self.settings.msg)
+        # The pre-commit hook does not with self.repo.index.commit.
+        # Use beeutils.exec_cmd function to execute it in a session.
+        # Self.commit_obj = self.repo.index.commit(self.settings.msg)
         self.rc = exec_cmd(["git", "commit", "-m", self.settings.msg])
         self.rc = exec_cmd(["git", "commit", "-m", self.settings.msg])
         self.repo.close()
@@ -58,7 +58,7 @@ class CommitCust:
 
 
 class CommitPre:
-    def __init__(self, p_settings, config=None):
+    def __init__(self, p_settings):
         cwd = Path().cwd()
         try:
             self.repo = Repo(cwd)
@@ -67,8 +67,8 @@ class CommitPre:
             self.repo.close()
             sys.exit(2)
 
-        # The pre-commit hooks does not with self.repo.index.commit. Use
-        # beeutils.exec_cmd function to execute it in a session.
+        # The pre-commit hook does not with self.repo.index.commit.
+        # Use beeutils.exec_cmd function to execute it in a session.
         if p_settings.msg:
             msg = CommitMsgs().dict()[p_settings.msg.upper()]
             self.rc = exec_cmd(["git", "commit", "-m", msg])

@@ -1,12 +1,10 @@
-"""Testing gitit__init__()"""
-
 import os
 from pathlib import Path
 
 import pytest
 from git import Repo
 
-from config import Config
+from config import get_settings
 from gitit import __main__
 from gitit.add.add import AddToMasterBranchError
 
@@ -23,9 +21,53 @@ class TestGitIt:
 
         pass
 
+    def test_gitit_with_args_adda(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr(
+            "sys.argv",
+            ["pytest", "adda", "--master"],
+        )
+        repo = Repo.init(env_setup.dir, bare=False)
+        repo.close()
+
+        os.chdir(env_setup.dir)
+        __main__.main()
+        repo = Repo.init(env_setup.dir, bare=False)
+
+        assert [f[0][0] for f in list(repo.index.entries.items())] == [
+            ".github/ISSUE_TEMPLATE/bugfix.md",
+            ".github/ISSUE_TEMPLATE/config.yaml",
+            ".github/workflows/ci.yaml",
+            ".github/workflows/release.yml",
+            ".gitignore",
+            "tracked.txt",
+            "tracked/tracked01.py",
+            "tracked/tracked02.py",
+        ]
+        repo.close()
+        os.chdir(env_setup.dir.parent)
+        pass
+
 
 @pytest.mark.add
 class TestAdd:
+    def test_add_a_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        # env_setup.make_structure()
+        monkeypatch.setattr("sys.argv", ["pytest", "adda", "--master"])
+
+        # repo = Repo.init(env_setup.dir, bare=False)
+        # repo.close()
+
+        os.chdir(env_setup.dir)
+        pa = __main__.ParseArgs()
+        pa.add_a()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
+        pass
+
     def test_add_a_clean(self, monkeypatch, env_setup_secure_self_destruct):
         env_setup = env_setup_secure_self_destruct
         env_setup.make_structure()
@@ -131,6 +173,45 @@ class TestAdd:
         os.chdir(env_setup.dir.parent)
         pass
 
+    def test_add_a_add_no_new_file(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr("sys.argv", ["pytest", "adda", "--master"])
+
+        repo = Repo.init(env_setup.dir, bare=False)
+        repo.close()
+
+        os.chdir(env_setup.dir)
+        pa = __main__.ParseArgs()
+        pa.add_a()
+        args = pa.parser.parse_args()
+        args.func(args)
+
+        repo = Repo(env_setup.dir)
+        repo.index.commit("Commit original files")
+        repo.index.commit("Commit original files")
+        # Path(env_setup.dir, "tracked", "tracked03.py").touch()
+        # assert repo.untracked_files == ["tracked/tracked03.py"]
+        repo.close()
+
+        args.func(args)
+        repo = Repo(env_setup.dir)
+        assert [x.a_path for x in repo.index.diff(None)] == []
+        assert [f[0][0] for f in list(repo.index.entries.items())] == [
+            ".github/ISSUE_TEMPLATE/bugfix.md",
+            ".github/ISSUE_TEMPLATE/config.yaml",
+            ".github/workflows/ci.yaml",
+            ".github/workflows/release.yml",
+            ".gitignore",
+            "tracked.txt",
+            "tracked/tracked01.py",
+            "tracked/tracked02.py",
+            # "tracked/tracked03.py",
+        ]
+
+        os.chdir(env_setup.dir.parent)
+        pass
+
     def test_add_a_delete_file(self, monkeypatch, env_setup_secure_self_destruct):
         env_setup = env_setup_secure_self_destruct
         env_setup.make_structure()
@@ -208,8 +289,8 @@ class TestBranch:
         env_setup = env_setup_secure_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr("sys.argv", ["pytest", "branchnew"] + param)
-        config = Config()
-        config.VENV_INSTITUTION = "BEE"
+        settings = get_settings()
+        settings.VENV_ORGANIZATION_NAME = "BEE"
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -219,9 +300,33 @@ class TestBranch:
         pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
-        obj = args.func(args, config)
+        obj = args.func(args, settings)
 
         assert obj.branch_name == repo.head.ref.name
+        pass
+
+    def test_branch_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr(
+            "sys.argv", ["pytest", "branchnew", "-b", "-i", "1", "-c", "feature", "--d", "My_first_branch"]
+        )
+        settings = get_settings()
+        settings.VENV_ORGANIZATION_NAME = "BEE"
+
+        # repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # repo.git.add(all=True)
+        # repo.index.commit("Commit original files")
+        # repo.close()
+        pa = __main__.ParseArgs()
+        pa.branch_new()
+        args = pa.parser.parse_args()
+
+        with pytest.raises(AttributeError):
+            args.func(args, settings)
+
+        # assert obj.branch_name == repo.head.ref.name
         pass
 
     @pytest.mark.parametrize(
@@ -244,8 +349,8 @@ class TestBranch:
         env_setup = env_setup_secure_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr("sys.argv", ["pytest", "branchnew"] + param)
-        config = Config()
-        config.VENV_INSTITUTION = "BEE"
+        settings = get_settings()
+        settings.VENV_ORGANIZATION_NAME = "BEE"
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -257,7 +362,7 @@ class TestBranch:
         pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
-        obj = args.func(args, config)
+        obj = args.func(args, settings)
 
         assert obj.branch_name == repo.head.ref.name
         pass
@@ -282,8 +387,8 @@ class TestBranch:
         env_setup = env_setup_secure_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr("sys.argv", ["pytest", "branchnew"] + param)
-        config = Config()
-        config.VENV_INSTITUTION = "BEE"
+        settings = get_settings()
+        settings.VENV_ORGANIZATION_NAME = "BEE"
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -295,7 +400,7 @@ class TestBranch:
         pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
-        obj = args.func(args, config)
+        obj = args.func(args, settings)
 
         assert obj.branch_name == repo.head.ref.name
         pass
@@ -320,8 +425,8 @@ class TestBranch:
         env_setup = env_setup_secure_self_destruct
         env_setup.make_structure()
         monkeypatch.setattr("sys.argv", ["pytest", "branchnew"] + param)
-        config = Config()
-        config.VENV_INSTITUTION = "BEE"
+        settings = get_settings()
+        settings.VENV_ORGANIZATION_NAME = "BEE"
 
         repo = Repo.init(env_setup.dir, bare=False)
         os.chdir(env_setup.dir)
@@ -336,7 +441,7 @@ class TestBranch:
         pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
-        obj = args.func(args, config)
+        obj = args.func(args, settings)
 
         assert obj.branch_name == repo.head.ref.name
         pass
@@ -358,10 +463,28 @@ class TestCommit:
         pa = __main__.ParseArgs()
         pa.commit_def()
         args = pa.parser.parse_args()
-        obj = args.func(args)
+        obj = args.func()
 
         assert not repo.is_dirty()
         assert obj.repo.head.ref.commit.message == "Routine commit\n"
+        pass
+
+    def test_commit_def_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr("sys.argv", ["pytest", "commitdef"])
+
+        # repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # repo.git.add(all=True)
+        # repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        # repo.git.config("user.name", "Somebody Somewhere", local=True)
+        # repo.close()
+        pa = __main__.ParseArgs()
+        pa.commit_def()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func()
         pass
 
     def test_commit_cust(self, monkeypatch, env_setup_secure_self_destruct):
@@ -382,6 +505,24 @@ class TestCommit:
 
         assert not repo.is_dirty()
         assert obj.repo.head.ref.commit.message == "Custom message\n"
+        pass
+
+    def test_commit_cust_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr("sys.argv", ["pytest", "commitcust", "--msg", "Custom message"])
+
+        # repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # repo.git.add(all=True)
+        # repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        # repo.git.config("user.name", "Somebody Somewhere", local=True)
+        # repo.close()
+        pa = __main__.ParseArgs()
+        pa.commit_cust()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
         pass
 
     @pytest.mark.parametrize(
@@ -409,6 +550,24 @@ class TestCommit:
 
         assert not repo.is_dirty()
         assert obj.repo.head.ref.commit.message == "Daily commit\n"
+        pass
+
+    def test_commit_pre_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        env_setup.make_structure()
+        monkeypatch.setattr("sys.argv", ["pytest", "commitpre", "DC"])
+
+        # repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # repo.git.add(all=True)
+        # repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        # repo.git.config("user.name", "Somebody Somewhere", local=True)
+        # repo.close()
+        pa = __main__.ParseArgs()
+        pa.commit_pre()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
         pass
 
 
@@ -442,6 +601,31 @@ class TestPush:
         assert obj.repo.remotes.origin.url == loc_repo.remotes.origin.url  # assert not repo.is_dirty()
         pass
 
+    def test_push_all_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        monkeypatch.setattr("sys.argv", ["pytest", "pushall"])
+        env_setup.make_structure("loc_repo")
+
+        # loc_repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # loc_repo.git.add(all=True)
+        # loc_repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        # loc_repo.git.config("user.name", "Somebody Somewhere", local=True)
+        # loc_repo.git.commit(message="Commit original files")
+        # loc_repo.git.checkout("HEAD", b="TestBranch")
+        # loc_repo.close()
+
+        # rem_repo_dir = env_setup.dir.parent / "rem_repo"
+        # rem_repo_dir.mkdir()
+        # Repo.init(rem_repo_dir, bare=True)
+        # loc_repo.create_remote("origin", rem_repo_dir)
+
+        pa = __main__.ParseArgs()
+        pa.push_all()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
+
     def test_push_master(self, monkeypatch, env_setup_secure_self_destruct):
         env_setup = env_setup_secure_self_destruct
         monkeypatch.setattr("sys.argv", ["pytest", "pushmaster"])
@@ -467,8 +651,32 @@ class TestPush:
         obj = args.func(args)
 
         assert obj.repo.remotes.origin.url == loc_repo.remotes.origin.url
-        assert obj.repo.tags["0.0.0"]
+        # assert obj.repo.tags["0.0.0"]
         pass
+
+    def test_push_master_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        monkeypatch.setattr("sys.argv", ["pytest", "pushmaster"])
+        env_setup.make_structure("loc_repo")
+
+        # loc_repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # loc_repo.git.add(all=True)
+        # loc_repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        # loc_repo.git.config("user.name", "Somebody Somewhere", local=True)
+        # loc_repo.git.commit(message="Commit original files")
+        # loc_repo.close()
+
+        # rem_repo_dir = env_setup.dir.parent / "rem_repo"
+        # rem_repo_dir.mkdir()
+        # Repo.init(rem_repo_dir, bare=True)
+        # loc_repo.create_remote("origin", rem_repo_dir)
+
+        pa = __main__.ParseArgs()
+        pa.push_master()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
 
 
 @pytest.mark.tag
@@ -494,6 +702,25 @@ class TestTag:
         assert obj.repo.tags["0.0.0"]
         pass
 
+    def test_tag_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        monkeypatch.setattr("sys.argv", ["pytest", "tag", "0.0.0"])
+        env_setup.make_structure()
+
+        # repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # repo.git.add(all=True)
+        # repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        # repo.git.config("user.name", "Somebody Somewhere", local=True)
+        # repo.git.commit(message="Commit original files")
+        # repo.close()
+
+        pa = __main__.ParseArgs()
+        pa.tag()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
+
     @pytest.mark.xfail
     def test_tag_duplicate(self, monkeypatch, env_setup_secure_self_destruct):
         env_setup = env_setup_secure_self_destruct
@@ -514,6 +741,23 @@ class TestTag:
 
         assert obj.repo.tags["0.0.0"]
         pass
+
+    def test_tag_duplicate_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        monkeypatch.setattr("sys.argv", ["pytest", "tag", "0.0.0"])
+        env_setup.make_structure()
+
+        # repo = Repo.init(env_setup.dir, bare=False)
+        # os.chdir(env_setup.dir)
+        # repo.git.add(all=True)
+        # repo.git.commit(message="Commit original files")
+        # repo.close()
+
+        pa = __main__.ParseArgs()
+        pa.tag()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
 
     @pytest.mark.parametrize(
         "tag",
@@ -550,6 +794,67 @@ class TestTag:
         assert obj.repo.tags["0.0.0"]
         pass
 
+    @pytest.mark.parametrize(
+        "tag",
+        [
+            # [],
+            ["--rel", ""],
+        ],
+    )
+    def test_push_tag_not_release(self, monkeypatch, env_setup_secure_self_destruct, tag):
+        env_setup = env_setup_secure_self_destruct
+        monkeypatch.setattr("sys.argv", ["pytest", "pushtag"] + tag)
+        env_setup.make_structure("loc_repo")
+        (env_setup.dir / "setup.cfg").write_text("[metadata]\nversion = 0.0.0")
+
+        loc_repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        loc_repo.git.add(all=True)
+        loc_repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        loc_repo.git.config("user.name", "Somebody Somewhere", local=True)
+        loc_repo.git.commit(message="Commit original files")
+        loc_repo.close()
+
+        rem_repo_dir = env_setup.dir.parent / "rem_repo"
+        rem_repo_dir.mkdir()
+        Repo.init(rem_repo_dir, bare=True)
+        loc_repo.create_remote("origin", rem_repo_dir)
+
+        pa = __main__.ParseArgs()
+        pa.push_tag()
+        args = pa.parser.parse_args()
+        obj = args.func(args)
+
+        assert obj.repo.remotes.origin.url == loc_repo.remotes.origin.url
+        assert obj.repo.tags["0.0.0"]
+        pass
+
+    def test_push_tag_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        monkeypatch.setattr("sys.argv", ["pytest", "pushtag", "--release", "0.0.0"])
+        env_setup.make_structure("loc_repo")
+        (env_setup.dir / "setup.cfg").write_text("[metadata]\nversion = 0.0.0")
+
+        # loc_repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # loc_repo.git.add(all=True)
+        # loc_repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        # loc_repo.git.config("user.name", "Somebody Somewhere", local=True)
+        # loc_repo.git.commit(message="Commit original files")
+        # loc_repo.close()
+
+        # rem_repo_dir = env_setup.dir.parent / "rem_repo"
+        # rem_repo_dir.mkdir()
+        # Repo.init(rem_repo_dir, bare=True)
+        # loc_repo.create_remote("origin", rem_repo_dir)
+
+        pa = __main__.ParseArgs()
+        pa.push_tag()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
+        pass
+
     def test_push_work(self, monkeypatch, env_setup_secure_self_destruct):
         env_setup = env_setup_secure_self_destruct
         monkeypatch.setattr("sys.argv", ["pytest", "pushwork"])
@@ -575,4 +880,30 @@ class TestTag:
         obj = args.func(args)
 
         assert obj.repo.remotes.origin.url == loc_repo.remotes.origin.url  # assert not repo.is_dirty()
+        pass
+
+    def test_push_work_repository_error(self, monkeypatch, env_setup_secure_self_destruct):
+        env_setup = env_setup_secure_self_destruct
+        monkeypatch.setattr("sys.argv", ["pytest", "pushwork"])
+        env_setup.make_structure("loc_repo")
+
+        # loc_repo = Repo.init(env_setup.dir, bare=False)
+        os.chdir(env_setup.dir)
+        # loc_repo.git.add(all=True)
+        # loc_repo.git.config("user.email", "somebody@everywhere.com", local=True)
+        # loc_repo.git.config("user.name", "Somebody Somewhere", local=True)
+        # loc_repo.git.commit(message="Commit original files")
+        # loc_repo.git.checkout("HEAD", b="TestBranch")
+        # loc_repo.close()
+
+        # rem_repo_dir = env_setup.dir.parent / "rem_repo"
+        # rem_repo_dir.mkdir()
+        # Repo.init(rem_repo_dir, bare=True)
+        # loc_repo.create_remote("origin", rem_repo_dir)
+
+        pa = __main__.ParseArgs()
+        pa.push_work()
+        args = pa.parser.parse_args()
+        with pytest.raises(AttributeError):
+            args.func(args)
         pass

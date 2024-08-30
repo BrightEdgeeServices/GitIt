@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from beetools import msg_error
+from beetools.msg import error
 from git import exc as git_exc
 from git import Repo
 from pydantic import BaseModel
@@ -30,6 +30,6 @@ class Tag:
                 annotate=True,
             )
         except git_exc.GitCommandError as err:
-            print(msg_error(f"\nStatus:\t\t{err.status}\nCommand:\t{err.command}\nMessage{err.stderr}"))
+            print(error(f"\nStatus:\t\t{err.status}\nCommand:\t{err.command}\nMessage{err.stderr}"))
             sys.exit(2)
         pass

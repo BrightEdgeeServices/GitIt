@@ -57,9 +57,9 @@ def env_setup_secure_self_destruct():
     rm_tree(setup_env.dir, p_crash=False)
 
 
-@pytest.fixture
-def env_setup_unsecure_self_destruct():
-    """Set up the environment base structure"""
-    setup_env = EnvSetUp(p_secure=False)
-    yield setup_env
-    rm_tree(setup_env.dir, p_crash=False)
+# @pytest.fixture
+# def env_setup_unsecure_self_destruct():
+#     """Set up the environment base structure"""
+#     setup_env = EnvSetUp(p_secure=False)
+#     yield setup_env
+#     rm_tree(setup_env.dir, p_crash=False)

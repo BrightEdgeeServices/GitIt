@@ -47,6 +47,7 @@ python = "^3.12.2"
 beetools = "^5.1.1"
 pygithub = "^2.4.0"
 gitpython = "^3.1.43"
+pydantic-settings = "^2.4.0"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
@@ -70,8 +71,13 @@ issues = 'https://github.com/BrightEdgeeServices/GitIt/issues'
 addopts = ['-vv', '--ignore-glob=*\\Archive', "--cov=./"]
 #addopts = ['--import-mode=importlib', "-v", "--cov=./", "--ignore-glob=*\\Archive", "--cov-report=html"]
 markers = [
+    "add: git add",
+    "branch: git branch",
+    "commit: git commit",
+    "main: Main module",
+    "push: git push",
     "select: Run a selection of tests",
-    "structure_accounting: Run tests linked to accounting",
+    "tag: git tag",
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",

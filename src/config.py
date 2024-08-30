@@ -1,9 +1,16 @@
-import os
+from pydantic_settings import BaseSettings
 
 
-class Config:
-    VENV_INSTITUTION = os.environ.get("VENV_INSTITUTION").strip()
+# class Config:
+#     VENV_ORGANIZATION_NAME = os.environ.get("VENV_ORGANIZATION_NAME")
+#
+#     def refresh(self):
+#         self.VENV_ORGANIZATION_NAME = os.environ.get("VENV_ORGANIZATION_NAME")
+#         pass
+class Settings(BaseSettings):
+    VENV_ORGANIZATION_NAME: str = "MyOrg"
 
-    def refresh(self):
-        self.VENV_INSTITUTION = os.environ.get("GITIT_ISSUE_PREFIX")
-        pass
+
+def get_settings() -> Settings:
+    return Settings()
+    # pass
