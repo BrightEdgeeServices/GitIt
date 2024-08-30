@@ -24,9 +24,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD:$PWD/src/gitit" >> $GITHUB_ENV
-
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
@@ -43,9 +40,12 @@ jobs:
         run: |
           poetry install --with dev
 
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD:$PWD/src/gitit" >> $GITHUB_ENV
+
       - name: Run pytest
         run: |
-          echo "PythonPath=$env:PYTHONPATH"
+          echo "PythonPath=$GITHUB_ENV"
           poetry run pytest  --cov=./
 
       - name: Upload coverage to Codecov
