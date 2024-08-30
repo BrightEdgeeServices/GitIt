@@ -41,6 +41,9 @@ jobs:
           poetry install --with dev
 
       - name: Run pytest
-        run: poetry run pytest  --cov=./
+        run: |
+          echo "PythonPath=$PYTHONPATH"
+          poetry run pytest  --cov=./
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
