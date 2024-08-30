@@ -45,7 +45,7 @@ jobs:
 
       - name: Run pytest
         run: |
-          echo "PythonPath=$GITHUB_ENV"
+          echo "PythonPath=$PYTHONPATH"
           poetry run pytest  --cov=./
 
       - name: Upload coverage to Codecov
