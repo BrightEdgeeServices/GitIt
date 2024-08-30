@@ -4,9 +4,9 @@ from pathlib import Path
 import pytest
 from git import Repo
 
-from config import get_settings
 from gitit import __main__
 from gitit.add.add import AddToMasterBranchError
+from gitit.config import get_settings
 
 
 @pytest.mark.main

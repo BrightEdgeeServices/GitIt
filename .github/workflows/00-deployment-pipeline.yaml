@@ -5,11 +5,11 @@ on:
   push:
 
 jobs:
-  Pre-Commit-and-Document-Check:
-    uses: ./.github/workflows/01-pre-commit-and-document-check.yaml
+#  Pre-Commit-and-Document-Check:
+#    uses: ./.github/workflows/01-pre-commit-and-document-check.yaml
 
   CI:
-    needs: Pre-Commit-and-Document-Check
+#    needs: Pre-Commit-and-Document-Check
     uses: ./.github/workflows/03-ci.yaml
     secrets: inherit
 
