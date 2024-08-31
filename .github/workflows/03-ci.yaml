@@ -6,6 +6,16 @@ on:
 jobs:
   CI:
     runs-on: ${{matrix.os}}
+    env:
+      GH_REPO_ACCESS_BY_OWN_APPS: ${{ secrets.GH_REPO_ACCESS_BY_OWN_APPS }}
+      INSTALLER_PWD: ${{vars.INSTALLER_PWD}}
+      INSTALLER_USERID: ${{vars.INSTALLER_USERID}}
+      MYSQL_DATABASE: ${{vars.MYSQL_DATABASE}}
+      MYSQL_HOST: ${{vars.MYSQL_HOST}}
+      MYSQL_PWD: ${{vars.MYSQL_PWD}}
+      MYSQL_ROOT_PASSWORD: ${{vars.MYSQL_ROOT_PASSWORD}}
+      MYSQL_TCP_PORT: ${{vars.MYSQL_TCP_PORT}}
+      VENV_ENVIRONMENT: ${{vars.VENV_ENVIRONMENT}}
     strategy:
       fail-fast: true
       matrix:
@@ -13,7 +23,23 @@ jobs:
         python-version: [ '3.12' ]
 #        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
         os: [ 'ubuntu-latest' ]
-
+    services:
+      mysql:
+        image: mysql:8.3.0
+        ports:
+          - ${{vars.MYSQL_TCP_PORT}}:3306
+        options:
+          --health-cmd="mysqladmin ping"
+          --health-cmd="mysqladmin ping -h localhost -u root -p${{ vars.MYSQL_ROOT_PASSWORD }}"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        env:
+          INSTALLER_PWD: ${INSTALLER_PWD}
+          INSTALLER_USERID: ${INSTALLER_USERID}
+          MYSQL_DATABASE: ${{vars.MYSQL_DATABASE}}
+          MYSQL_ROOT_PASSWORD: ${{vars.MYSQL_ROOT_PASSWORD}}
+          VENV_ENVIRONMENT: ${{vars.VENV_ENVIRONMENT}}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
