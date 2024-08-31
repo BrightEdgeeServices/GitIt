@@ -32,7 +32,8 @@ jobs:
       - name: Configure Poetry
         run: |
           poetry config keyring.enabled false
-          poetry config http-basic.gitit x-access-token ${{ secrets.GH_REPO_ACCESS_BY_OWN_APPS }}
+          poetry config http-basic.github.com x-access-token ${{ secrets.GH_REPO_ACCESS_BY_OWN_APPS }}
+
 
 #      - name: Verify DB exists
 #        run: mysql --host ${{env.MYSQL_HOST}} -uroot -p${{env.MYSQL_ROOT_PASSWORD}} -e "SHOW DATABASES"
