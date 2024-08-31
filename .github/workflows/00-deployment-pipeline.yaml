@@ -17,3 +17,4 @@ jobs:
     needs: CI
     if: startsWith(github.ref, 'refs/tags/')
     uses: ./.github/workflows/04-build-and-deploy-to-production.yaml
+    secrets: inherit

@@ -61,7 +61,7 @@ class TestAdd:
         # repo.close()
 
         os.chdir(env_setup.dir)
-        pa = gitit.gitit.__main__.ParseArgs()
+        pa = gitit.__main__.ParseArgs()
         pa.add_a()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
