@@ -34,15 +34,18 @@ jobs:
           poetry config keyring.enabled false
           poetry config http-basic.gitit x-access-token ${{ secrets.GH_REPO_ACCESS_BY_OWN_APPS }}
 
-      - name: Verify DB exists
-        run: mysql --host ${{env.MYSQL_HOST}} -uroot -p${{env.MYSQL_ROOT_PASSWORD}} -e "SHOW DATABASES"
+#      - name: Verify DB exists
+#        run: mysql --host ${{env.MYSQL_HOST}} -uroot -p${{env.MYSQL_ROOT_PASSWORD}} -e "SHOW DATABASES"
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD:$PWD/src/gitit" >> $GITHUB_ENV
+
       #      - name: Install editable package
+      #        run: pip install -e .[dev]
+
       - name: Install dependencies
         run: |
           poetry install --with dev
