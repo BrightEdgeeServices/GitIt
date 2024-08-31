@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from git import Repo
 
-import gitit.__main__
+from gitit import __main__
 from gitit.add.add import AddToMasterBranchError
 from gitit.config import get_settings
 
@@ -17,7 +17,7 @@ class TestGitIt:
             ["gitit"],
         )
         with pytest.raises(SystemExit):
-            gitit.__main__.main()
+            __main__.main()
 
         pass
 
@@ -32,7 +32,7 @@ class TestGitIt:
         repo.close()
 
         os.chdir(env_setup.dir)
-        gitit.__main__.main()
+        __main__.main()
         repo = Repo.init(env_setup.dir, bare=False)
 
         assert [f[0][0] for f in list(repo.index.entries.items())] == [
@@ -61,7 +61,7 @@ class TestAdd:
         # repo.close()
 
         os.chdir(env_setup.dir)
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.add_a()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -77,7 +77,7 @@ class TestAdd:
         repo.close()
 
         os.chdir(env_setup.dir)
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
@@ -106,7 +106,7 @@ class TestAdd:
         repo.close()
 
         os.chdir(env_setup.dir)
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
@@ -144,7 +144,7 @@ class TestAdd:
         repo.close()
 
         os.chdir(env_setup.dir)
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
@@ -182,7 +182,7 @@ class TestAdd:
         repo.close()
 
         os.chdir(env_setup.dir)
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
@@ -221,7 +221,7 @@ class TestAdd:
         repo.close()
 
         os.chdir(env_setup.dir)
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.add_a()
         args = pa.parser.parse_args()
         args.func(args)
@@ -259,7 +259,7 @@ class TestAdd:
         repo.close()
 
         os.chdir(env_setup.dir)
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.add_a()
         args = pa.parser.parse_args()
         with pytest.raises(AddToMasterBranchError):
@@ -297,7 +297,7 @@ class TestBranch:
         repo.git.add(all=True)
         repo.index.commit("Commit original files")
         repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
         obj = args.func(args, settings)
@@ -319,7 +319,7 @@ class TestBranch:
         # repo.git.add(all=True)
         # repo.index.commit("Commit original files")
         # repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
 
@@ -359,7 +359,7 @@ class TestBranch:
         (env_setup.dir / "setup.cfg").touch()
         # repo.git.add(all = True)
         repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
         obj = args.func(args, settings)
@@ -397,7 +397,7 @@ class TestBranch:
         (env_setup.dir / "setup.cfg").touch()
         repo.git.add(all=True)
         repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
         obj = args.func(args, settings)
@@ -438,7 +438,7 @@ class TestBranch:
         (env_setup.dir / "setup.cfg").touch()
         (env_setup.dir / "tracked.txt").write_text("Delete me")
         repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.branch_new()
         args = pa.parser.parse_args()
         obj = args.func(args, settings)
@@ -460,7 +460,7 @@ class TestCommit:
         repo.git.config("user.email", "somebody@everywhere.com", local=True)
         repo.git.config("user.name", "Somebody Somewhere", local=True)
         repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.commit_def()
         args = pa.parser.parse_args()
         obj = args.func()
@@ -480,7 +480,7 @@ class TestCommit:
         # repo.git.config("user.email", "somebody@everywhere.com", local=True)
         # repo.git.config("user.name", "Somebody Somewhere", local=True)
         # repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.commit_def()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -498,7 +498,7 @@ class TestCommit:
         repo.git.config("user.email", "somebody@everywhere.com", local=True)
         repo.git.config("user.name", "Somebody Somewhere", local=True)
         repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.commit_cust()
         args = pa.parser.parse_args()
         obj = args.func(args)
@@ -518,7 +518,7 @@ class TestCommit:
         # repo.git.config("user.email", "somebody@everywhere.com", local=True)
         # repo.git.config("user.name", "Somebody Somewhere", local=True)
         # repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.commit_cust()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -543,7 +543,7 @@ class TestCommit:
         repo.git.config("user.email", "somebody@everywhere.com", local=True)
         repo.git.config("user.name", "Somebody Somewhere", local=True)
         repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.commit_pre()
         args = pa.parser.parse_args()
         obj = args.func(args)
@@ -563,7 +563,7 @@ class TestCommit:
         # repo.git.config("user.email", "somebody@everywhere.com", local=True)
         # repo.git.config("user.name", "Somebody Somewhere", local=True)
         # repo.close()
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.commit_pre()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -593,7 +593,7 @@ class TestPush:
         Repo.init(rem_repo_dir, bare=True)
         loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_all()
         args = pa.parser.parse_args()
         obj = args.func(args)
@@ -620,7 +620,7 @@ class TestPush:
         # Repo.init(rem_repo_dir, bare=True)
         # loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_all()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -645,7 +645,7 @@ class TestPush:
         Repo.init(rem_repo_dir, bare=True)
         loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_master()
         args = pa.parser.parse_args()
         obj = args.func(args)
@@ -672,7 +672,7 @@ class TestPush:
         # Repo.init(rem_repo_dir, bare=True)
         # loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_master()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -694,7 +694,7 @@ class TestTag:
         repo.git.commit(message="Commit original files")
         repo.close()
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.tag()
         args = pa.parser.parse_args()
         obj = args.func(args)
@@ -715,7 +715,7 @@ class TestTag:
         # repo.git.commit(message="Commit original files")
         # repo.close()
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.tag()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -733,10 +733,10 @@ class TestTag:
         repo.git.commit(message="Commit original files")
         repo.close()
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.tag()
         args = pa.parser.parse_args()
-        obj = args.func(args)
+        args.func(args)
         obj = args.func(args)
 
         assert obj.repo.tags["0.0.0"]
@@ -753,7 +753,7 @@ class TestTag:
         # repo.git.commit(message="Commit original files")
         # repo.close()
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.tag()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -785,7 +785,7 @@ class TestTag:
         Repo.init(rem_repo_dir, bare=True)
         loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_tag()
         args = pa.parser.parse_args()
         obj = args.func(args)
@@ -820,7 +820,7 @@ class TestTag:
         Repo.init(rem_repo_dir, bare=True)
         loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_tag()
         args = pa.parser.parse_args()
         obj = args.func(args)
@@ -848,7 +848,7 @@ class TestTag:
         # Repo.init(rem_repo_dir, bare=True)
         # loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_tag()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
@@ -874,7 +874,7 @@ class TestTag:
         Repo.init(rem_repo_dir, bare=True)
         loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_work()
         args = pa.parser.parse_args()
         obj = args.func(args)
@@ -901,7 +901,7 @@ class TestTag:
         # Repo.init(rem_repo_dir, bare=True)
         # loc_repo.create_remote("origin", rem_repo_dir)
 
-        pa = gitit.__main__.ParseArgs()
+        pa = __main__.ParseArgs()
         pa.push_work()
         args = pa.parser.parse_args()
         with pytest.raises(AttributeError):
