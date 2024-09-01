@@ -1,15 +1,14 @@
 from pydantic_settings import BaseSettings
 
 
+# class Config:
+#     VENV_ORGANIZATION_NAME = os.environ.get("VENV_ORGANIZATION_NAME")
+#
+#     def refresh(self):
+#         self.VENV_ORGANIZATION_NAME = os.environ.get("VENV_ORGANIZATION_NAME")
+#         pass
 class Settings(BaseSettings):
-    INSTALLER_USERID: str = ""
-    INSTALLER_PWD: str = ""
-    MYSQL_HOST: str = ""
-    MYSQL_TCP_PORT: int = "3306"
-    MYSQL_DATABASE: str = ""
-    MYSQL_PWD: str = ""
-    MYSQL_ROOT_PASSWORD: str = ""
-    VENV_ENVIRONMENT: str = "prod"
+    VENV_ORGANIZATION_NAME: str = "MyOrg"
 
 
 def get_settings() -> Settings:
