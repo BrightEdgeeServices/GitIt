@@ -19,7 +19,7 @@ source = ['src', 'tests']
 profile = "black"
 
 [tool.poetry]
-name = 'git-it'
+name = 'gitit'
 version = '0.1.0'
 description = 'Tools for batch scripts, virtual environments and utilities.'
 authors = [
