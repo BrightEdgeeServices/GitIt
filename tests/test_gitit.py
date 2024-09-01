@@ -748,7 +748,7 @@ class TestTag:
         env_setup.make_structure()
 
         # repo = Repo.init(env_setup.dir, bare=False)
-        # os.chdir(env_setup.dir)
+        os.chdir(env_setup.dir)
         # repo.git.add(all=True)
         # repo.git.commit(message="Commit original files")
         # repo.close()
