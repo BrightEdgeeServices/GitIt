@@ -11,5 +11,5 @@ This document explains conventions and other important structural information.
 74 Char Limit
 -------------
 
-74 characters includin py and rst
+74 characters including py and rst
 Stuff is ordered alphabetically where possible.  This includes attribute-, method-, class-, etc names.  Should there be a dependency, the item (stuff) are moved to the bottom, in alphabetical order, to accommodate the dependency.
