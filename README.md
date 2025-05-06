@@ -2,11 +2,11 @@
 
 | **Category** | **Links**                                                                                                                                                                                  |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| General      | [![][maintenance_y_img]][maintenance_y_lnk] [![][semver_pic]][semver_link]  [![][license_img]][license_link]                                                                               |
+| General      | [![][maintenance_y_img]][maintenance_y_lnk] [![][semver_pic]][semver_link] [![][license_img]][license_link]                                                                                |
 | CI           | [![][gha_tests_img]][gha_tests_lnk] [![][pre_commit_ci_img]][pre_commit_ci_lnk] [![][codestyle_img]][codestyle_lnk] <br/>[![][codecov_img]][codecov_lnk] [![][gha_docu_img]][gha_docu_lnk] |
 | Github       | [![][gh_issues_img]][gh_issues_lnk] [![][gh_language_img]][gh_language_lnk] [![][gh_last_commit_img]][gh_last_commit_lnk] [![][gh_deployment_img]][gh_deployment_lnk]                      |
 
-\[!\[\]gha_docu_img\]\][gha_docu_lnk]
+\[![]gha_docu_img\]\][gha_docu_lnk]
 This utility assist in combining git and GitHub functionality to automate, standardise and improve ease of use with
 defaults. Some git commands are implemented as is and do not necessarily improve the dit commands, but is there for
 completeness.
