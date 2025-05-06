@@ -47,6 +47,7 @@ Issues = 'https://github.com/BrightEdgeeServices/GitIt/issues'
 Changelog = 'https://github.com/BrightEdgeeServices/GitIt/blob/master/ReleaseNotes.md'
 Homepage = 'https://github.com/BrightEdgeeServices/GitIt'
 Repository = "https://github.com/BrightEdgeeServices/GitIt.git"
+
 [tool.black]
 line-length = 120
 target-version = [
