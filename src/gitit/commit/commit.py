@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from beetools.beescript import exec_cmd
+from beetools.script import exec_cmd
 from git import exc as git_exc
 from git import Repo
 from pydantic import BaseModel
