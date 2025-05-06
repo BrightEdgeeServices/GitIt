@@ -1,4 +1,4 @@
-# Release 5.2.0
+# Release 0.0.17
 
 - Remove the ISSUE_TEMPLATE relying on the .github repository for the defaults.
 - Add new workflows:
@@ -16,7 +16,7 @@
 
 ______________________________________________________________________
 
-# Release 5.1.0
+# Release 0.0.16
 
 ## General
 

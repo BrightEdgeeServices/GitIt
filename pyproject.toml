@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = 'gitit'
-version = '0.1.0'
+version = '0.0.17'
 description = 'Tools for batch scripts, virtual environments and utilities.'
 authors = [
     { name = "Hendrik du Toit", email = "hendrik@brightedge.co.za" }
@@ -71,8 +71,6 @@ source = [
 
 [tool.isort]
 profile = "black"
-
-[tool.poetry]
 
 [tool.poetry.dependencies]
 [tool.poetry.group.dev]
