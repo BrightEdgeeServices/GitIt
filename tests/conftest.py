@@ -10,7 +10,6 @@ from tempfile import TemporaryDirectory
 import pytest
 from beetools import rm_tree
 
-
 # sys.path.append('path')
 
 
